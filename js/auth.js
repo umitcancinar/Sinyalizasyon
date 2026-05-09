@@ -191,7 +191,7 @@
   if (logoutBtn) {
     logoutBtn.addEventListener('click', () => {
       clearAuth();
-      window.location.href = 'index.html';
+      window.location.href = 'app.html';
     });
   }
 
