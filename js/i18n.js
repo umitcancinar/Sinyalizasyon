@@ -37,8 +37,8 @@
       'feat.contacts.desc': '112, 155, 110 ve daha fazlası. Tek dokunuşla.',
       'feat.messages.title': 'Hazır Mesajlar',
       'feat.messages.desc': 'Trafikte takıldığını tek tuşla iletebilirsin.',
-      'feat.cat.title': 'Sinyal — AI Asistanın',
-      'feat.cat.desc': 'Grok AI ile güçlendirilmiş trafik odaklı asistan.',
+      'feat.cat.title': 'Sinyal — Akıllı Asistan',
+      'feat.cat.desc': 'Trafik odaklı, hızlı ve entegre akıllı asistan.',
       // CTA
       'cta.title': 'Bir Sonraki Kırmızı Işıkta Hazır Ol',
       'cta.desc': 'Ücretsiz. Uygulama indirmene gerek yok.',
@@ -151,8 +151,8 @@
       'feat.contacts.desc': '112, 155, 110 and more. One tap to call.',
       'feat.messages.title': 'Quick Messages',
       'feat.messages.desc': "Let people know you're stuck in traffic in one tap.",
-      'feat.cat.title': 'Signal — Your AI Assistant',
-      'feat.cat.desc': 'Powered by Grok AI, focused on traffic and driving.',
+      'feat.cat.title': 'Sinyal — Smart Assistant',
+      'feat.cat.desc': 'Fast, integrated, and traffic-focused smart assistant.',
       // CTA
       'cta.title': 'Be Ready for the Next Red Light',
       'cta.desc': 'Free. No app download required.',
