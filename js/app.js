@@ -8,7 +8,7 @@
     const { status } = e.detail;
     if (status === 'unavailable' || status === 'error') {
       statusDot.className = 'status-dot';
-      statusLabel.textContent = window.i18n ? window.i18n.t('status.init') : 'GPS Hatası';
+      statusLabel.textContent = window.i18n ? window.i18n.t('status.error') : 'GPS Hatası';
       statusDot.style.background = 'var(--red)';
     } else if (status === 'starting') {
       statusDot.className = 'status-dot searching';

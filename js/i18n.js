@@ -71,6 +71,7 @@
       'gps.skip': 'Şimdi değil, sonra ayarla',
       // App
       'status.init': 'GPS başlatılıyor...',
+      'status.error': 'GPS Hatası / İzin Verilmedi',
       'status.tracking': 'Konum izleniyor',
       'status.searching': 'Trafik ışığı aranıyor...',
       'status.stopped': 'Durdu — Eşleştiriliyor',
@@ -184,6 +185,7 @@
       'gps.skip': 'Not now, set up later',
       // App
       'status.init': 'Initializing GPS...',
+      'status.error': 'GPS Error / Denied',
       'status.tracking': 'Location tracking',
       'status.searching': 'Looking for traffic light...',
       'status.stopped': 'Stopped — Matching...',

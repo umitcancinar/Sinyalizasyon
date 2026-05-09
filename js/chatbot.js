@@ -135,7 +135,82 @@
     setTimeout(() => { messagesEl.scrollTop = messagesEl.scrollHeight; }, 50);
   }
 
-  // ── SEND & FETCH ─────────────────────────────────────────────
+  // ── OFFLINE AKILLI YANIT SİSTEMİ ──────────────────────────────
+  const OFFLINE_RESPONSES = {
+    tr: {
+      greetings: [
+        'Merhaba! 🚦 Ben Sinyal, trafik asistanın. Trafik kuralları veya uygulama hakkında sorularını yanıtlayabilirim!',
+        'Selam! 😊 Trafik ışığında beklerken sana yardımcı olabilirim. Oyunlarımızı denedin mi?'
+      ],
+      traffic_rules: [
+        'Kırmızı ışıkta mutlaka durun! 🔴 Takip mesafesi şehir içinde en az 2 saniye olmalıdır.',
+        'Emniyet kemeri takma zorunluluğu hem ön hem arka koltuk için geçerlidir! 🚗',
+        'Sarı ışık "hazırlan" değil, "dur" anlamına gelir! 🟡'
+      ],
+      app_features: [
+        'Sinyalizasyon uygulamasında 3 özellik var: 🎮 Oyunlar, 💡 Bilgi Kartları ve 📞 Hızlı Arama. Menüden keşfedebilirsin!'
+      ],
+      games: [
+        'Oyunlar bölümünde 3 farklı oyun seni bekliyor! 🎮 Hafıza, Refleks ve Kelime oyunları ile vakit geçirebilirsin.'
+      ],
+      emergency: [
+        'Acil durumlar için numaralar: 🚑 112 - Acil, 🚔 155 - Polis, 🚒 110 - İtfaiye. Hızlı Arama özelliğini kullanabilirsin!'
+      ],
+      default: [
+        'İlginç bir soru! 🤔 Ben trafik güvenliği, uygulama özellikleri ve acil durumlar konusunda yardımcı olabilirim.',
+        'Bu konuda elimde detaylı bilgi yok ama trafik kuralları veya oyunlar hakkında sorular sorabilirsin! 🚦'
+      ]
+    },
+    en: {
+      greetings: [
+        'Hello! 🚦 I\'m Sinyal, your traffic assistant. I can answer questions about traffic rules or app features!',
+        'Hi there! 😊 Have you tried our mini games from the menu?'
+      ],
+      traffic_rules: [
+        'Always stop at red lights! 🔴 Safe following distance should be at least 2 seconds in urban areas.'
+      ],
+      app_features: [
+        'Sinyalizasyon has 3 features: 🎮 Mini Games, 💡 Info Cards, and 📞 Quick Call.'
+      ],
+      games: [
+        '3 games await you! 🎮 Memory Match, Reflex Test, and Word Puzzle.'
+      ],
+      emergency: [
+        'Emergency numbers: 🚑 112 - Emergency, 🚔 155 - Police, 🚒 110 - Fire Dept.'
+      ],
+      default: [
+        'Interesting question! 🤔 I can help with traffic safety, app features, and emergencies.',
+        'I don\'t have detailed info on that, but I can answer questions about traffic rules or games! 🚦'
+      ]
+    }
+  };
+
+  const KEYWORD_MAP = {
+    greetings: ['merhaba', 'selam', 'hello', 'hi', 'hey', 'naber', 'nasılsın', 'meraba'],
+    traffic_rules: ['kural', 'trafik', 'hız', 'kırmızı', 'yeşil', 'sarı', 'ışık', 'kemer', 'ceza', 'rule', 'speed', 'light'],
+    app_features: ['uygulama', 'özellik', 'nasıl', 'feature', 'app', 'how'],
+    games: ['oyun', 'game', 'hafıza', 'refleks', 'kelime', 'memory', 'reflex', 'word', 'oyna', 'play'],
+    emergency: ['acil', 'emergency', '112', '155', '110', 'polis', 'ambulans', 'kaza', 'yardım', 'ara', 'call']
+  };
+
+  function getOfflineCategory(message) {
+    const lower = message.toLowerCase();
+    for (const [category, keywords] of Object.entries(KEYWORD_MAP)) {
+      for (const kw of keywords) {
+        if (lower.includes(kw)) return category;
+      }
+    }
+    return 'default';
+  }
+
+  function getOfflineResponse(message, language) {
+    const lang = OFFLINE_RESPONSES[language] ? language : 'tr';
+    const category = getOfflineCategory(message);
+    const responses = OFFLINE_RESPONSES[lang][category] || OFFLINE_RESPONSES[lang].default;
+    return responses[Math.floor(Math.random() * responses.length)];
+  }
+
+  // ── SEND & FETCH (FRONTEND ONLY) ─────────────────────────────────────────────
   async function handleSend(forcedText = null) {
     const text = forcedText || inputEl.value.trim();
     if (!text || isTyping) return;
@@ -149,26 +224,18 @@
     addMessage('user', text);
     showTyping();
 
-    try {
-      const lang = window.i18n ? window.i18n.getLang() : 'tr';
-      const res = await fetch(`${API}/chatbot/query`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: text, language: lang, history: history.slice(-5) }),
-      });
+    const lang = window.i18n ? window.i18n.getLang() : 'tr';
+    const reply = getOfflineResponse(text, lang);
 
-      if (!res.ok) throw new Error();
-      const data = await res.json();
+    // Yapay bekleme süresi (500ms - 1500ms)
+    const delay = Math.floor(Math.random() * 1000) + 500;
+    
+    setTimeout(() => {
       hideTyping();
-      addMessage('bot', data.reply);
+      addMessage('bot', reply);
       trigger.setAttribute('data-state', 'jump');
       setTimeout(() => { if (isOpen) trigger.setAttribute('data-state', 'idle'); }, 1000);
-
-    } catch (err) {
-      hideTyping();
-      const errTxt = window.i18n?.getLang() === 'en' ? 'Sorry, I cannot connect to the server right now.' : 'Üzgünüm, şu an sunucuya bağlanamıyorum.';
-      addMessage('bot', errTxt);
-    }
+    }, delay);
   }
 
   // ── SUGGESTIONS ──────────────────────────────────────────────
