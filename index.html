@@ -187,7 +187,13 @@
           </div>
         </div>
         <div class="feature-card large fade-section">
-          <div class="feature-icon-wrap" style="width:80px;height:80px;font-size:40px">🐱</div>
+          <div class="feature-icon-wrap" style="width:80px;height:80px;">
+            <div class="ai-cat-avatar" style="width:60px;height:60px;">
+              <div class="ai-cat-ear left"></div><div class="ai-cat-ear right"></div>
+              <div class="ai-cat-face"><div class="ai-cat-eye left"></div><div class="ai-cat-eye right"></div></div>
+              <div class="ai-cat-hand">👋</div>
+            </div>
+          </div>
           <div class="feature-body">
             <h3 class="feature-title" data-i18n="feat.cat.title">Sinyal — AI Asistanın</h3>
             <p class="feature-desc" data-i18n="feat.cat.desc">Sağ alttaki sevimli kedi Sinyal, trafik kuralları ve uygulama hakkında sorularını yanıtlıyor. Grok AI ile güçlendirilmiş, trafik odaklı bir asistan.</p>
@@ -229,7 +235,14 @@
 <div class="cat-chatbot-wrap" id="catChatbotWrap">
   <div class="chat-window" id="chatWindow" role="dialog" aria-label="Sinyal AI Asistan" aria-modal="true">
     <div class="chat-header">
-      <div class="chat-header-avatar">🐱</div>
+      <div class="chat-header-avatar">
+        <div class="ai-cat-avatar">
+          <div class="ai-cat-ear left"></div>
+          <div class="ai-cat-ear right"></div>
+          <div class="ai-cat-face"><div class="ai-cat-eye left"></div><div class="ai-cat-eye right"></div></div>
+          <div class="ai-cat-hand">👋</div>
+        </div>
+      </div>
       <div class="chat-header-info">
         <div class="chat-header-name" data-i18n="chat.name">Sinyal</div>
         <div class="chat-header-status" data-i18n="chat.status">Çevrimiçi</div>
@@ -247,7 +260,14 @@
   </div>
   <div class="cat-bubble" id="catBubble">👋 <span data-i18n="cat.hello">Merhaba! Sana yardımcı olabilirim.</span></div>
   <button class="cat-trigger" id="catTrigger" data-state="wave" aria-label="Sinyal AI asistanını aç">
-    <span class="cat-face" id="catFace">🐱</span>
+    <div class="cat-face" id="catFace">
+      <div class="ai-cat-avatar" id="triggerAvatar">
+        <div class="ai-cat-ear left"></div>
+        <div class="ai-cat-ear right"></div>
+        <div class="ai-cat-face"><div class="ai-cat-eye left"></div><div class="ai-cat-eye right"></div></div>
+        <div class="ai-cat-hand">👋</div>
+      </div>
+    </div>
     <span class="cat-notif" id="catNotif" aria-hidden="true">1</span>
   </button>
 </div>

@@ -1,6 +1,6 @@
 /* chatbot.js — Sinyal AI Asistanı (Grok RAG entegrasyonu) */
 (function () {
-  const API = window.SINYAL_API || 'http://localhost:3002/api';
+  const API = window.SINYAL_API || 'https://sinyal-backend.vercel.app/api';
 
   const trigger = document.getElementById('catTrigger');
   const windowEl = document.getElementById('chatWindow');
@@ -209,6 +209,41 @@
       '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
     }[tag] || tag));
   }
+
+  // ── EYE TRACKING & ANIMATIONS ────────────────────────────────
+  document.addEventListener('mousemove', (e) => {
+    const avatars = document.querySelectorAll('.ai-cat-avatar');
+    avatars.forEach(avatar => {
+      const rect = avatar.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      
+      const deltaX = e.clientX - centerX;
+      const deltaY = e.clientY - centerY;
+      
+      // Limit eye movement distance
+      const distance = Math.min(Math.hypot(deltaX, deltaY), 10);
+      const angle = Math.atan2(deltaY, deltaX);
+      
+      const moveX = Math.cos(angle) * distance * 0.3;
+      const moveY = Math.sin(angle) * distance * 0.3;
+      
+      const eyes = avatar.querySelectorAll('.ai-cat-eye');
+      eyes.forEach(eye => {
+        // Keep the CSS animation by setting a custom property or direct transform
+        // But since we have a scaleY(0.5) on hover in CSS, we should handle it gracefully
+        eye.style.transform = `translate(${moveX}px, ${moveY}px)`;
+      });
+    });
+  });
+
+  window.addEventListener('load', () => {
+    const triggerAvatar = document.getElementById('triggerAvatar');
+    if (triggerAvatar) {
+      triggerAvatar.classList.add('animate-greet');
+      setTimeout(() => triggerAvatar.classList.remove('animate-greet'), 1500);
+    }
+  });
 
   // Initial call
   init();
