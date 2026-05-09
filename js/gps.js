@@ -76,6 +76,8 @@
   }
 
   // ── GPS WATCH ───────────────────────────────────────────────
+  let initTimeout = null;
+
   function start() {
     if (!('geolocation' in navigator)) {
       console.warn('[GPS] Geolocation desteklenmiyor.');
@@ -85,8 +87,23 @@
 
     emitStatus('starting');
 
+    // Tarayıcı bug'ı veya OS seviyesinde engelleme varsa watchPosition takılı kalabiliyor.
+    // Bu yüzden kendi manuel timeout'umuzu ekliyoruz (10 saniye).
+    initTimeout = setTimeout(() => {
+      if (buffer.length === 0) {
+        console.warn('[GPS] Manuel zaman aşımı devrede. Konum alınamadı.');
+        onError({ code: 3, message: 'Manuel Timeout' });
+      }
+    }, 10000);
+
     watchId = navigator.geolocation.watchPosition(
-      onPosition,
+      (pos) => {
+        if (initTimeout) {
+          clearTimeout(initTimeout);
+          initTimeout = null;
+        }
+        onPosition(pos);
+      },
       onError,
       {
         enableHighAccuracy: true,
