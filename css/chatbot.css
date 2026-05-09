@@ -312,7 +312,7 @@
   background: var(--bg-1);
   border: 1.5px solid var(--bg-2);
   color: var(--text-0);
-  font-size: var(--text-sm);
+  font-size: 16px; /* iOS zoom prevent */
   resize: none;
   outline: none;
   max-height: 100px;

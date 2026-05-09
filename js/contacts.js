@@ -18,13 +18,21 @@
     try {
       const res = await fetch(`${API}/content/contacts`);
       if (!res.ok) throw new Error();
-      const contacts = await res.json();
+      const rawContacts = await res.json();
+
+      // Deduplicate and limit to 5
+      const seen = new Set();
+      const contacts = rawContacts.filter(c => {
+        if (seen.has(c.phone)) return false;
+        seen.add(c.phone);
+        return true;
+      }).slice(0, 5);
 
       list.innerHTML = contacts.map(c => `
          <a href="tel:${c.phone.replace(/\s+/g, '')}" class="contact-item" data-category="${c.category}">
            <div class="contact-icon">${ICON_MAP[c.category] || '📞'}</div>
            <div class="contact-info">
-             <h4 class="contact-name">${c.category === 'emergency' || c.category === 'roadside' || c.category === 'government' ? c.name : c.name}</h4>
+             <h4 class="contact-name">${c.name}</h4>
              <span class="contact-phone">${c.phone}</span>
            </div>
            <div class="contact-call-icon">📞</div>
@@ -59,7 +67,16 @@
     try {
       const res = await fetch(`${API}/content/templates`);
       if (!res.ok) throw new Error();
-      const templates = await res.json();
+      const rawTemplates = await res.json();
+
+      // Deduplicate and limit to 5
+      const seen = new Set();
+      const templates = rawTemplates.filter(t => {
+        const textStr = window.i18n?.getLang() === 'en' ? t.content_en : t.content_tr;
+        if (seen.has(textStr)) return false;
+        seen.add(textStr);
+        return true;
+      }).slice(0, 5);
 
       list.innerHTML = templates.map(t => {
         const textStr = window.i18n?.getLang() === 'en' ? t.content_en : t.content_tr;

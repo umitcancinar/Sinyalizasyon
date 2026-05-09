@@ -109,6 +109,8 @@
       'reflex.ready': '🟢 DOKUN!',
       'reflex.early': 'Çok erken! Tekrar deneyin.',
       'word.attempts': 'hakkınız var',
+      'word.how_to': 'Nasıl Oynanır?',
+      'word.instruction': '5 harfli gizli kelimeyi 6 denemede bulun. Her tahminden sonra harflerin renkleri ipucu verecektir.',
       // Messages
       'msg.to': 'Alıcı Numara',
       // Chatbot
@@ -223,6 +225,8 @@
       'reflex.ready': '🟢 TAP NOW!',
       'reflex.early': 'Too early! Try again.',
       'word.attempts': 'attempts left',
+      'word.how_to': 'How to Play?',
+      'word.instruction': 'Find the 5-letter hidden word in 6 attempts. After each guess, the colors will give clues.',
       // Messages
       'msg.to': 'Recipient Number',
       // Chatbot
