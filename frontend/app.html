@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="tr" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sinyalizasyon — Ana Uygulama">
+  <title>Sinyalizasyon | Uygulama</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231a1a1a'/><circle cx='50' cy='28' r='14' fill='%23FF3B30'/><circle cx='50' cy='52' r='14' fill='%23FFD60A' opacity='.3'/><circle cx='50' cy='76' r='14' fill='%2334C759' opacity='.3'/></svg>">
+  <link rel="stylesheet" href="css/design-system.css">
+  <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="css/chatbot.css">
+</head>
+<body class="app-body" id="pageBody">
+
+<!-- ── HEADER ─────────────────────────────────────────────── -->
+<header class="site-header" id="siteHeader">
+  <div class="container header-inner">
+    <a href="index.html" class="header-logo" aria-label="Ana sayfaya git">
+      <div class="tl-icon" aria-hidden="true">
+        <span class="tl-dot r"></span>
+        <span class="tl-dot y"></span>
+        <span class="tl-dot g active"></span>
+      </div>
+      <span data-i18n="brand">Sinyalizasyon</span>
+    </a>
+
+    <!-- Header countdown widget (sağ üst) -->
+    <div class="countdown-widget" id="headerCountdown" data-phase="red" aria-live="polite" style="display:none">
+      <span>🚦</span>
+      <span class="cw-time" id="headerCountdownTime">--:--</span>
+    </div>
+
+    <div class="header-actions">
+      <button class="lang-btn" id="langToggle" aria-label="Dil değiştir">
+        <span class="lang-flag" id="langFlag">🇹🇷</span>
+        <span id="langLabel">TR</span>
+      </button>
+      <button class="theme-btn" id="themeToggle" aria-label="Temayı değiştir">☀️</button>
+      <button class="btn btn-ghost" id="logoutBtn" style="padding:8px 12px;font-size:13px" data-i18n="btn.logout" aria-label="Çıkış yap">Çıkış</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="app-layout">
+
+    <!-- ── GPS STATUS BAR ─────────────────────────────────── -->
+    <div class="status-bar" id="statusBar" aria-live="polite">
+      <div class="status-dot" id="statusDot"></div>
+      <span class="status-label" id="statusLabel" data-i18n="status.init">GPS başlatılıyor...</span>
+    </div>
+
+    <!-- ── IDLE STATE (hareket halinde) ──────────────────── -->
+    <div class="idle-card visible" id="idleCard" aria-hidden="false">
+      <div class="idle-icon">🚗</div>
+      <h2 class="idle-title" data-i18n="idle.title">Trafik Işığında Bekliyor musun?</h2>
+      <p class="idle-desc" data-i18n="idle.desc">Durduğunda otomatik algılanacaksın. GPS aktif ve izleniyor.</p>
+    </div>
+
+    <!-- ── MAIN COUNTDOWN CARD ────────────────────────────── -->
+    <div class="countdown-card" id="countdownCard" data-phase="red" style="display:none" aria-label="Trafik ışığı sayacı">
+
+      <div class="countdown-card-header">
+        <div class="countdown-location">
+          <span>📍</span>
+          <span id="lightName" data-i18n="light.unknown">Bilinmeyen Kavşak</span>
+        </div>
+        <span class="countdown-distance" id="lightDistance"></span>
+      </div>
+
+      <div class="countdown-display">
+        <p class="countdown-phase-label" id="phaseLabel" data-i18n="phase.red">Kırmızı Işık</p>
+        <div class="countdown-time" id="countdownTime" aria-label="Kalan süre">--:--</div>
+        <p class="countdown-sublabel" id="subLabel" data-i18n="cd.to.green">yeşile kalan süre</p>
+      </div>
+
+      <div class="countdown-progress-wrap">
+        <div class="countdown-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressBar" aria-label="Döngü ilerlemesi">
+          <div class="countdown-progress-fill" id="progressFill"></div>
+        </div>
+      </div>
+
+      <!-- Turn Signal Selector -->
+      <div class="turn-signal-bar" role="group" aria-label="Dönüş yönü seçin">
+        <button class="turn-btn" id="turnLeft" data-dir="left" aria-pressed="false">
+          <span class="turn-icon">↰</span>
+          <span class="turn-label" data-i18n="turn.left">Sol</span>
+        </button>
+        <button class="turn-btn active" id="turnStraight" data-dir="straight" aria-pressed="true">
+          <span class="turn-icon">↑</span>
+          <span class="turn-label" data-i18n="turn.straight">Düz</span>
+        </button>
+        <button class="turn-btn" id="turnRight" data-dir="right" aria-pressed="false">
+          <span class="turn-icon">↱</span>
+          <span class="turn-label" data-i18n="turn.right">Sağ</span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- ── MENU GRID ───────────────────────────────────────── -->
+    <div class="menu-grid" id="menuGrid" aria-label="Menü" style="display:none">
+      <button class="menu-card" id="menuGames" data-tab="games" aria-label="Oyunlar">
+        <div class="menu-card-icon">🎮</div>
+        <span class="menu-card-title" data-i18n="menu.games">Oyunlar</span>
+        <span class="menu-card-subtitle" data-i18n="menu.games.sub">3 mini oyun</span>
+      </button>
+      <button class="menu-card" id="menuCards" data-tab="cards" aria-label="Bilgi Kartları">
+        <div class="menu-card-icon">💡</div>
+        <span class="menu-card-title" data-i18n="menu.cards">Bilgi Kartları</span>
+        <span class="menu-card-subtitle" data-i18n="menu.cards.sub">Vay be!</span>
+      </button>
+      <button class="menu-card" id="menuContacts" data-tab="contacts" aria-label="Hızlı Arama">
+        <div class="menu-card-icon">📞</div>
+        <span class="menu-card-title" data-i18n="menu.contacts">Hızlı Arama</span>
+        <span class="menu-card-subtitle" data-i18n="menu.contacts.sub">112, 155 ve diğerleri</span>
+      </button>
+      <button class="menu-card" id="menuMessages" data-tab="messages" aria-label="Mesajlar">
+        <div class="menu-card-icon">💬</div>
+        <span class="menu-card-title" data-i18n="menu.messages">Mesajlar</span>
+        <span class="menu-card-subtitle" data-i18n="menu.messages.sub">Hazır şablonlar</span>
+      </button>
+    </div>
+
+    <!-- ── CONTENT PANELS ─────────────────────────────────── -->
+
+    <!-- GAMES PANEL -->
+    <div class="content-panel" id="panelGames" role="region" aria-label="Oyunlar">
+      <div class="panel-header">
+        <h2 class="panel-title">🎮 <span data-i18n="menu.games">Oyunlar</span></h2>
+        <button class="panel-close" data-close="panelGames" aria-label="Kapat">✕</button>
+      </div>
+      <div class="panel-body">
+        <!-- Game Tabs -->
+        <div class="games-tabs" role="tablist">
+          <button class="game-tab-btn active" data-game="memory" role="tab" aria-selected="true" data-i18n="game.memory">Eşleştirme</button>
+          <button class="game-tab-btn" data-game="reflex" role="tab" aria-selected="false" data-i18n="game.reflex">Refleks</button>
+          <button class="game-tab-btn" data-game="word" role="tab" aria-selected="false" data-i18n="game.word">Kelime</button>
+        </div>
+
+        <!-- Memory Game -->
+        <div class="game-panel active" id="gameMemory" role="tabpanel">
+          <div class="game-meta">
+            <span class="game-stat-chip">⏱ <span id="memTimer">0:00</span></span>
+            <span class="game-stat-chip">👆 <span id="memMoves">0</span> <span data-i18n="game.moves">hamle</span></span>
+            <span class="game-stat-chip">⭐ <span id="memScore">0</span></span>
+          </div>
+          <div class="memory-grid" id="memoryGrid" role="grid" aria-label="Hafıza oyunu kartları"></div>
+          <button class="btn btn-secondary" id="memRestart" style="width:100%;margin-top:8px" data-i18n="game.restart">Yeniden Başlat</button>
+          <div class="leaderboard">
+            <p class="leaderboard-title" data-i18n="game.leaderboard">🏆 Skor Tablosu</p>
+            <div id="memLeaderboard"></div>
+          </div>
+        </div>
+
+        <!-- Reflex Game -->
+        <div class="game-panel" id="gameReflex" role="tabpanel">
+          <div class="game-meta">
+            <span class="game-stat-chip">🏆 <span data-i18n="game.best">En İyi:</span> <span id="reflexBest">—</span></span>
+          </div>
+          <div class="reflex-area" id="reflexArea" role="button" tabindex="0" aria-label="Refleks testi alanı">
+            <span class="reflex-emoji" id="reflexEmoji">🔴</span>
+            <span class="reflex-label" id="reflexLabel" data-i18n="reflex.wait">Hazır olunca ekrana dokunun...</span>
+          </div>
+          <div class="leaderboard" style="margin-top:16px">
+            <p class="leaderboard-title" data-i18n="game.leaderboard">🏆 Skor Tablosu</p>
+            <div id="reflexLeaderboard"></div>
+          </div>
+        </div>
+
+        <!-- Word Game -->
+        <div class="game-panel" id="gameWord" role="tabpanel">
+          <div class="game-meta">
+            <span class="game-stat-chip" id="wordAttemptChip">6 <span data-i18n="word.attempts">hakkınız var</span></span>
+          </div>
+          <div class="word-grid" id="wordGrid" aria-label="Kelime bulmaca tahtası"></div>
+          <div class="word-keyboard" id="wordKeyboard" aria-label="Sanal klavye"></div>
+          <p id="wordMsg" style="font-size:13px;text-align:center;margin-top:8px;color:var(--text-2)"></p>
+          <button class="btn btn-secondary" id="wordRestart" style="width:100%;margin-top:8px" data-i18n="game.restart">Yeni Kelime</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- INFO CARDS PANEL -->
+    <div class="content-panel" id="panelCards" role="region" aria-label="Bilgi Kartları">
+      <div class="panel-header">
+        <h2 class="panel-title">💡 <span data-i18n="menu.cards">Bilgi Kartları</span></h2>
+        <button class="panel-close" data-close="panelCards" aria-label="Kapat">✕</button>
+      </div>
+      <div class="panel-body">
+        <div class="cards-auto-bar"><div class="cards-auto-fill" id="cardsAutoFill"></div></div>
+        <div class="cards-viewport" id="cardsViewport" role="region" aria-label="Bilgi kartı görüntüleyici"></div>
+        <div class="cards-nav">
+          <div class="cards-dots" id="cardsDots" role="tablist"></div>
+          <div class="cards-btns">
+            <button class="cards-btn" id="cardsPrev" aria-label="Önceki kart">‹</button>
+            <button class="cards-btn" id="cardsNext" aria-label="Sonraki kart">›</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTACTS PANEL -->
+    <div class="content-panel" id="panelContacts" role="region" aria-label="Hızlı Arama">
+      <div class="panel-header">
+        <h2 class="panel-title">📞 <span data-i18n="menu.contacts">Hızlı Arama</span></h2>
+        <button class="panel-close" data-close="panelContacts" aria-label="Kapat">✕</button>
+      </div>
+      <div class="panel-body">
+        <div class="contacts-list" id="contactsList" role="list"></div>
+      </div>
+    </div>
+
+    <!-- MESSAGES PANEL -->
+    <div class="content-panel" id="panelMessages" role="region" aria-label="Mesajlar">
+      <div class="panel-header">
+        <h2 class="panel-title">💬 <span data-i18n="menu.messages">Mesajlar</span></h2>
+        <button class="panel-close" data-close="panelMessages" aria-label="Kapat">✕</button>
+      </div>
+      <div class="panel-body">
+        <div class="msg-phone-bar">
+          <div class="msg-phone-input">
+            <p class="msg-phone-label" data-i18n="msg.to">Alıcı Numara</p>
+            <input type="tel" class="msg-phone-field" id="msgPhone" placeholder="+90 5XX XXX XX XX"
+              aria-label="Telefon numarası" autocomplete="tel">
+          </div>
+        </div>
+        <div class="templates-list" id="templatesList" role="list"></div>
+      </div>
+    </div>
+
+  </div><!-- /app-layout -->
+</main>
+
+<!-- ── CAT CHATBOT ─────────────────────────────────────────── -->
+<div class="cat-chatbot-wrap" id="catChatbotWrap">
+  <div class="chat-window" id="chatWindow" role="dialog" aria-label="Sinyal AI Asistan" aria-modal="true">
+    <div class="chat-header">
+      <div class="chat-header-avatar">🐱</div>
+      <div class="chat-header-info">
+        <div class="chat-header-name" data-i18n="chat.name">Sinyal</div>
+        <div class="chat-header-status" data-i18n="chat.status">Çevrimiçi</div>
+      </div>
+      <button class="chat-header-close" id="chatClose" aria-label="Kapat">✕</button>
+    </div>
+    <div class="chat-messages" id="chatMessages" role="log" aria-live="polite"></div>
+    <div class="chat-suggestions" id="chatSuggestions"></div>
+    <div class="chat-input-bar">
+      <textarea class="chat-input" id="chatInput" placeholder="Bir şey sor..." rows="1"
+        aria-label="Mesajınız" data-i18n-placeholder="chat.placeholder"></textarea>
+      <button class="chat-send-btn" id="chatSend" aria-label="Gönder">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="cat-bubble" id="catBubble"></div>
+  <button class="cat-trigger" id="catTrigger" data-state="idle" aria-label="Sinyal AI asistanını aç">
+    <span class="cat-face" id="catFace">🐱</span>
+    <span class="cat-notif" id="catNotif" aria-hidden="true"></span>
+  </button>
+</div>
+
+<!-- ── TOAST ───────────────────────────────────────────────── -->
+<div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+<script src="js/theme.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/gps.js"></script>
+<script src="js/traffic.js"></script>
+<script src="js/games.js"></script>
+<script src="js/cards.js"></script>
+<script src="js/contacts.js"></script>
+<script src="js/chatbot.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
