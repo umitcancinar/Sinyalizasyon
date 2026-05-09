@@ -6,58 +6,30 @@ const { initDatabase } = require('./config/database');
 const app = express();
 const PORT = process.env.PORT || 3002;
 
-// ── CORS ────────────────────────────────────────────────────────────────────
 app.use(cors({
-  origin: true, // Allow all origins that reach the server
-  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  origin: true,
   credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 app.use(express.json({ limit: '1mb' }));
-app.use(express.urlencoded({ extended: true }));
 
-// ── HEALTH CHECK ─────────────────────────────────────────────────────────────
-app.get('/api/health', (req, res) => {
-  res.json({
-    status: 'ok',
-    service: 'Trafik Sinyalizasyon API',
-    timestamp: new Date().toISOString(),
-    environment: process.env.NODE_ENV || 'development',
-  });
-});
-
-// ── ROUTES ───────────────────────────────────────────────────────────────────
+// Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/traffic', require('./routes/traffic'));
 app.use('/api/chatbot', require('./routes/chatbot'));
-app.use('/api/games', require('./routes/games'));
-app.use('/api/content', require('./routes/content'));
+app.use('/api/leaderboard', require('./routes/leaderboard'));
+app.use('/api/cards', require('./routes/cards'));
 
-// ── 404 ──────────────────────────────────────────────────────────────────────
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok', service: 'Trafik Sinyalizasyon API', environment: 'production' });
+});
+
 app.use((req, res) => {
   res.status(404).json({ error: 'Endpoint bulunamadı.' });
 });
 
-// ── GLOBAL ERROR HANDLER ─────────────────────────────────────────────────────
-app.use((err, req, res, next) => {
-  console.error('[Server] Hata:', err.message);
-  res.status(500).json({ error: 'Sunucu hatası.' });
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
-
-// ── INIT ─────────────────────────────────────────────────────────────────────
-initDatabase()
-  .then(() => {
-    console.log('[Server] Veritabanı hazır.');
-    if (process.env.NODE_ENV !== 'production') {
-      app.listen(PORT, () => {
-        console.log(`[Server] http://localhost:${PORT} — Trafik Sinyalizasyon API`);
-      });
-    }
-  })
-  .catch(err => {
-    console.error('[Server] Veritabanı başlatma hatası:', err.message);
-    process.exit(1);
-  });
-
-module.exports = app;

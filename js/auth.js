@@ -4,7 +4,7 @@
   // Backend URL: production'da gerçek URL'yi buraya yazın
   const API = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
     ? 'http://localhost:3002/api'
-    : 'https://sinyal-backend.vercel.app/api';
+    : 'https://sinyalizasyon-606xboyui-umitcancinars-projects.vercel.app/api';
 
   window.SINYAL_API = API; // Diğer dosyalara aç
 

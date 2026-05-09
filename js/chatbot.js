@@ -1,6 +1,6 @@
 /* chatbot.js — Sinyal AI Asistanı (Grok RAG entegrasyonu) */
 (function () {
-  const API = window.SINYAL_API || 'https://sinyal-backend.vercel.app/api';
+  const API = window.SINYAL_API || 'https://sinyalizasyon-606xboyui-umitcancinars-projects.vercel.app/api';
 
   const trigger = document.getElementById('catTrigger');
   const windowEl = document.getElementById('chatWindow');
