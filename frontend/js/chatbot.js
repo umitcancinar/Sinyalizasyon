@@ -94,8 +94,12 @@
     const isUser = role === 'user';
     const msg = document.createElement('div');
     msg.className = `chat-msg ${role}`;
+    const avatarHTML = isUser 
+      ? '👤' 
+      : '<div class="ai-cat-avatar small"><div class="ai-cat-ear left"></div><div class="ai-cat-ear right"></div><div class="ai-cat-face"><div class="ai-cat-eye left"></div><div class="ai-cat-eye right"></div></div></div>';
+
     msg.innerHTML = `
-      <div class="chat-msg-avatar">${isUser ? '👤' : '🐱'}</div>
+      <div class="chat-msg-avatar">${avatarHTML}</div>
       <div class="chat-msg-bubble">${escapeHTML(text)}</div>
     `;
     messagesEl.appendChild(msg);
@@ -113,7 +117,7 @@
     typing.className = 'chat-msg bot typing-indicator-wrap';
     typing.id = 'typingIndicator';
     typing.innerHTML = `
-      <div class="chat-msg-avatar">🐱</div>
+      <div class="chat-msg-avatar"><div class="ai-cat-avatar small"><div class="ai-cat-ear left"></div><div class="ai-cat-ear right"></div><div class="ai-cat-face"><div class="ai-cat-eye left"></div><div class="ai-cat-eye right"></div></div></div></div>
       <div class="chat-typing"><span></span><span></span><span></span></div>
     `;
     messagesEl.appendChild(typing);
