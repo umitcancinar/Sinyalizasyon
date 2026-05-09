@@ -7,25 +7,11 @@ const app = express();
 const PORT = process.env.PORT || 3002;
 
 // ── CORS ────────────────────────────────────────────────────────────────────
-const allowedOrigins = [
-  process.env.FRONTEND_URL,
-  'http://localhost:5500',
-  'http://127.0.0.1:5500',
-  'https://umitcancinar.me',
-  'https://www.umitcancinar.me',
-];
-
 app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin || allowedOrigins.some(o => o && origin.startsWith(o))) {
-      callback(null, true);
-    } else {
-      callback(new Error(`CORS hatası: ${origin}`));
-    }
-  },
+  origin: true, // Allow all origins that reach the server
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: false,
+  credentials: true,
 }));
 
 app.use(express.json({ limit: '1mb' }));
