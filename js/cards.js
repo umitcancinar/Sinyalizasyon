@@ -18,7 +18,17 @@
     try {
       const res = await fetch(`${API}/content/cards`);
       if (!res.ok) throw new Error();
-      cards = await res.json();
+      const rawCards = await res.json();
+      
+      // Aynı kartların tekrar tekrar eklenmesini önlemek için benzersiz (unique) hale getiriyoruz
+      const seen = new Set();
+      cards = rawCards.filter(card => {
+        if (seen.has(card.title_tr)) return false;
+        seen.add(card.title_tr);
+        return true;
+      });
+
+      if (cards.length === 0) throw new Error('No cards found');
     } catch (_) {
       // Fallback inline cards
       cards = [
