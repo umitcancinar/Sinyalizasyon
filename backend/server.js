@@ -60,18 +60,11 @@ app.use((err, req, res, next) => {
 });
 
 // ── INIT ─────────────────────────────────────────────────────────────────────
-initDatabase()
-  .then(() => {
-    console.log('[Server] Veritabanı hazır.');
-    if (process.env.NODE_ENV !== 'production') {
-      app.listen(PORT, () => {
-        console.log(`[Server] http://localhost:${PORT} — Trafik Sinyalizasyon API`);
-      });
-    }
-  })
-  .catch(err => {
-    console.error('[Server] Veritabanı başlatma hatası:', err.message);
-    process.exit(1);
+console.log('[Server] Veritabanı hazır varsayılıyor.');
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`[Server] http://localhost:${PORT} — Trafik Sinyalizasyon API`);
   });
+}
 
 module.exports = app;
