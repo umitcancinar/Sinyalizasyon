@@ -1,7 +1,5 @@
 # 🚦 Sinyalizasyon — Akıllı Trafik Asistanı
 
-![Sinyalizasyon Banner](https://raw.githubusercontent.com/umitcancinar/Sinyalizasyon/main/assets/banner.png)
-
 > **"Trafik ışığında beklemeyi bir fırsata dönüştür."**
 
 Sinyalizasyon, sürücülerin kırmızı ışıkta beklerken yaşadığı belirsizlik ve stresi ortadan kaldıran, bekleme süresini eğlenceli ve verimli bir deneyime dönüştüren Apple tasarım diline sahip modern bir web uygulamasıdır.
@@ -92,9 +90,10 @@ graph TD
 
 ## 👤 Hazırlayan
 
-**Ümitcan Çınar**  
+**Ümitcan Çınar**
+**Enes Pepe**
 *Full Stack Developer & AI Integration Enthusiast*
 
 ---
 
-> **Not:** Bu proje eğitim amaçlı geliştirilmiş olup, trafikte kullanımı sırasında dikkat dağıtmaması için sesli uyarı sistemleriyle desteklenmiştir. Lütfen sürüş sırasında telefon kullanım kurallarına uyunuz.
+> **Not:**  Lütfen sürüş sırasında telefon kullanım kurallarına uyunuz.
