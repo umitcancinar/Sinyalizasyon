@@ -73,12 +73,6 @@
     bubble.classList.add('visible');
     trigger.setAttribute('data-state', 'wave');
 
-    if (notif && !notif.classList.contains('visible')) {
-      const current = parseInt(notif.textContent || '0');
-      notif.textContent = current + 1;
-      notif.classList.add('visible');
-    }
-
     clearTimeout(bubbleTimeout);
     bubbleTimeout = setTimeout(hideBubble, duration);
   }
