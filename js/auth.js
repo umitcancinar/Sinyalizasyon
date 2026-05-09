@@ -170,30 +170,10 @@
         return;
       }
 
-      // GPS izni iste
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          // ✅ İzin verildi
-          localStorage.setItem('sinyal_gps', 'granted');
-          toast('Konum izni verildi! 📍', 'success');
-          redirectToApp();
-        },
-        (err) => {
-          // ⚠️ İzin reddedildi veya hata
-          // Kırmızı hata yerine sarı uyarı göster — uygulama GPS olmadan da çalışır
-          if (err.code === 1) {
-            // Kullanıcı izni reddetti
-            localStorage.setItem('sinyal_gps', 'denied');
-            toast('GPS izni reddedildi. Trafik ışığı özelliği devre dışı kalacak.', 'info');
-          } else {
-            // Timeout veya konum alınamadı
-            localStorage.setItem('sinyal_gps', 'error');
-            toast('Konum şu an alınamadı. Sonra ayarlardan açabilirsiniz.', 'info');
-          }
-          redirectToApp();
-        },
-        { enableHighAccuracy: true, timeout: 10000 }
-      );
+      // ── SİMÜLASYON MODU: Gerçek GPS isteğini atla ──
+      localStorage.setItem('sinyal_gps', 'granted');
+      toast('Konum izni verildi (Simülasyon)! 📍', 'success');
+      redirectToApp();
     });
 
     document.getElementById('gpsSkipBtn').addEventListener('click', () => {

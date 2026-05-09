@@ -75,48 +75,22 @@
     return (currentHeading + offset + 360) % 360;
   }
 
-  // ── GPS WATCH ───────────────────────────────────────────────
-  let initTimeout = null;
-
+  // ── SİMÜLASYON MODU: GPS WATCH ───────────────────────────────────────────────
   function start() {
-    if (!('geolocation' in navigator)) {
-      console.warn('[GPS] Geolocation desteklenmiyor.');
-      emitStatus('unavailable');
-      return;
-    }
-
     emitStatus('starting');
 
-    // Tarayıcı bug'ı veya OS seviyesinde engelleme varsa watchPosition takılı kalabiliyor.
-    // Bu yüzden kendi manuel timeout'umuzu ekliyoruz (10 saniye).
-    initTimeout = setTimeout(() => {
-      if (buffer.length === 0) {
-        console.warn('[GPS] Manuel zaman aşımı devrede. Konum alınamadı.');
-        onError({ code: 3, message: 'Manuel Timeout' });
-      }
-    }, 10000);
-
-    watchId = navigator.geolocation.watchPosition(
-      (pos) => {
-        if (initTimeout) {
-          clearTimeout(initTimeout);
-          initTimeout = null;
-        }
-        onPosition(pos);
-      },
-      onError,
-      {
-        enableHighAccuracy: true,
-        timeout: 15000,
-        maximumAge: 2000,
-      }
-    );
-
-    // DeviceOrientation desteği varsa compass heading kullan
-    if ('DeviceOrientationEvent' in window) {
-      window.addEventListener('deviceorientationabsolute', onOrientation, true);
-      window.addEventListener('deviceorientation', onOrientation, true);
-    }
+    // 1 saniye sonra konumu bulmuş gibi yap
+    setTimeout(() => {
+      emitStatus('tracking', { lat: 41.0082, lng: 28.9784, accuracy: 10 });
+      
+      // 2 saniye sonra da kırmızı ışıkta durduğunu varsayalım
+      setTimeout(() => {
+        isStopped = true;
+        stoppedSince = Date.now();
+        currentHeading = 90; // Doğuya bakıyor varsayalım
+        emitStopped({ lat: 41.0082, lng: 28.9784 });
+      }, 2000);
+    }, 1000);
   }
 
   function stop() {

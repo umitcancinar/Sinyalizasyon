@@ -72,10 +72,10 @@
       // App
       'status.init': 'GPS başlatılıyor...',
       'status.error': 'GPS Hatası / İzin Verilmedi',
-      'status.tracking': 'Konum izleniyor',
+      'status.tracking': 'SİMÜLASYONDAYIZ - İZLENİYOR',
       'status.searching': 'Trafik ışığı aranıyor...',
-      'status.stopped': 'Durdu — Eşleştiriliyor',
-      'status.matched': 'Trafik ışığı bulundu',
+      'status.stopped': 'SİMÜLASYONDAYIZ - DURDUĞUNUZ VARSAYILIYOR',
+      'status.matched': 'SİMÜLASYON - IŞIK BULUNDU',
       'idle.title': 'Trafik Işığında Bekliyor musun?',
       'idle.desc': 'Durduğunda otomatik algılanacaksın. GPS aktif ve izleniyor.',
       'phase.red': 'Kırmızı Işık',
