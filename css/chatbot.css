@@ -66,10 +66,10 @@
   50%       { transform: rotate(5deg); }
 }
 
-/* Tooltip bubble — chatbot ikonunun ÜSTÜNDE */
+/* Tooltip bubble — chatbot ikonunun HEMEN ÜSTÜNDE */
 .cat-bubble {
   position: absolute;
-  bottom: calc(100% + 12px); /* İkonun üstünde */
+  bottom: 85px; /* İkon 72px + 13px boşluk */
   right: 0;
   background: var(--bg-0);
   border: 1px solid var(--bg-2);

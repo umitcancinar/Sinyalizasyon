@@ -1,12 +1,13 @@
 /**
  * grokService.js
  *
- * Grok API (xAI) wrapper — RAG mimarisi ile chatbot yanıt üretimi.
- * API key ASLA frontend'e sızdırılmaz, sadece bu dosyadan kullanılır.
- *
- * Grok API erişilemezse akıllı offline fallback yanıtları üretir.
+ * Grok API (xAI) wrapper — RAG (Retrieval-Augmented Generation) Mimarisi.
+ * Yapay zeka ile doğrudan .env üzerinden haberleşir, API key frontend'e gönderilmez.
+ * RAG hataya karşı dayanıklıdır; DB çökse bile Grok API çalışmaya devam eder.
+ * Grok API erişilemezse (örneğin kredi bittiğinde) akıllı offline fallback devreye girer.
  */
 
+require('dotenv').config({ path: require('path').resolve(__dirname, '../../.env') });
 const fetch = require('node-fetch');
 const { pool } = require('../config/database');
 
@@ -32,70 +33,58 @@ ASLA yapma:
 const OFFLINE_RESPONSES = {
   tr: {
     greetings: [
-      'Merhaba! 🚦 Ben Sinyal, trafik asistanın. Trafik kuralları, güvenlik ipuçları veya uygulamanın özellikleri hakkında sorularını yanıtlayabilirim!',
-      'Selam! 😊 Trafik ışığında beklerken sana yardımcı olabilirim. Oyunlarımızı denedin mi? Sol menüden 3 farklı mini oyun oynayabilirsin!',
-      'Hoş geldin! 🚗 Sinyalizasyon\'un AI asistanı olarak buradayım. Bana trafik hakkında ne sormak istersen sor!'
+      'Merhaba! 🚦 Ben Sinyal, trafik asistanın. Trafik kuralları veya uygulama hakkında sorularını yanıtlayabilirim!',
+      'Selam! 😊 Trafik ışığında beklerken sana yardımcı olabilirim. Oyunlarımızı denedin mi?'
     ],
     traffic_rules: [
-      'Kırmızı ışıkta mutlaka durun! 🔴 Takip mesafesi şehir içinde en az 2 saniye, şehir dışında en az 4 saniye olmalıdır. Yağmurlu havalarda bu süreyi ikiye katlayın.',
-      'Emniyet kemeri takma zorunluluğu hem ön hem arka koltuk için geçerlidir. Takmamak hem can güvenliğinizi riskli hale getirir hem de ceza almanıza yol açar! 🚗',
-      'Sarı ışık "hazırlan" değil, "dur" anlamına gelir! 🟡 Kavşağa girmişseniz geçebilirsiniz ama henüz girmediyseniz durmanız gerekir.',
-      'Okul bölgelerinde hız sınırı 30 km/s\'dir. Çocuklar beklenmedik hareketler yapabilir, ekstra dikkatli olun! 🏫'
+      'Kırmızı ışıkta mutlaka durun! 🔴 Takip mesafesi şehir içinde en az 2 saniye olmalıdır.',
+      'Emniyet kemeri takma zorunluluğu hem ön hem arka koltuk için geçerlidir! 🚗',
+      'Sarı ışık "hazırlan" değil, "dur" anlamına gelir! 🟡'
     ],
     app_features: [
-      'Sinyalizasyon uygulamasında 3 harika özellik var: 🎮 Mini Oyunlar (hafıza, refleks, kelime bulmaca), 💡 Bilgi Kartları (ilginç bilgiler) ve 📞 Hızlı Arama (acil numaralar). Hepsini menüden keşfedebilirsin!',
-      'Uygulamamız GPS ile durduğunu otomatik algılıyor ve en yakın trafik ışığını bularak yeşile kalan süreyi gösteriyor. Bu sürede oyun oynayabilir, bilgi kartlarını okuyabilirsin! 🚦',
-      'Acil bir durumda mı kaldın? Hızlı Arama özelliğimizle 112, 155, 110 gibi acil numaralara tek dokunuşla ulaşabilirsin! 📞'
+      'Sinyalizasyon uygulamasında 3 özellik var: 🎮 Oyunlar, 💡 Bilgi Kartları ve 📞 Hızlı Arama. Menüden keşfedebilirsin!'
     ],
     games: [
-      'Oyunlar bölümünde 3 farklı oyun seni bekliyor! 🎮\n\n🧠 Hafıza Eşleştirme: Kartları çevir ve eşlerini bul\n⚡ Refleks Testi: Yeşil ışıkta ne kadar hızlı tepki verirsin?\n📝 Kelime Bulmaca: Trafik terimlerini tahmin et\n\nHepsinin skor tablosu var, en iyi skoru yapmaya çalış!',
-      'Mini oyunlarımız trafik ışığında bekleme sürenizi eğlenceli hale getirmek için tasarlandı! Sol menüden "Oyunlar" butonuna tıklayarak hemen başlayabilirsin. 🎮'
+      'Oyunlar bölümünde 3 farklı oyun seni bekliyor! 🎮 Hafıza, Refleks ve Kelime oyunları ile vakit geçirebilirsin.'
     ],
     emergency: [
-      'Acil durumlar için önemli numaralar:\n🚑 112 - Acil Yardım\n🚔 155 - Polis İmdat\n🚒 110 - İtfaiye\n📞 182 - Alo Trafik\n\nHızlı Arama özelliğimizle tek dokunuşla arayabilirsin!',
-      'Trafik kazası durumunda: 1) Güvenli bir yere çekilin 2) 112\'yi arayın 3) Yaralılara ilk yardım yapın 4) Kaza yerini fotoğraflayın 5) Tutanak tutun. Sakin kalın! 🆘'
+      'Acil durumlar için numaralar: 🚑 112 - Acil, 🚔 155 - Polis, 🚒 110 - İtfaiye. Hızlı Arama özelliğini kullanabilirsin!'
     ],
     default: [
-      'İlginç bir soru! 🤔 Ben trafik güvenliği, uygulama özellikleri ve acil durumlar konusunda yardımcı olabilirim. Başka bir şey sormak ister misin?',
-      'Bu konuda elimde detaylı bilgi yok ama trafik kuralları, oyunlar veya acil numaralar hakkında sorular sorabilirsin! 🚦',
-      'Hmm, bunu tam olarak bilmiyorum. Ama sana trafik güvenliği ipuçları verebilir veya uygulama özelliklerini tanıtabilirim! Oyunları denedin mi? 🎮'
+      'İlginç bir soru! 🤔 Ben trafik güvenliği, uygulama özellikleri ve acil durumlar konusunda yardımcı olabilirim.',
+      'Bu konuda elimde detaylı bilgi yok ama trafik kuralları veya oyunlar hakkında sorular sorabilirsin! 🚦'
     ]
   },
   en: {
     greetings: [
-      'Hello! 🚦 I\'m Sinyal, your traffic assistant. I can answer questions about traffic rules, safety tips, or app features!',
-      'Hi there! 😊 I can help you while waiting at the traffic light. Have you tried our games? You can play 3 different mini games from the menu!',
-      'Welcome! 🚗 I\'m here as Sinyalizasyon\'s AI assistant. Ask me anything about traffic!'
+      'Hello! 🚦 I\'m Sinyal, your traffic assistant. I can answer questions about traffic rules or app features!',
+      'Hi there! 😊 Have you tried our mini games from the menu?'
     ],
     traffic_rules: [
-      'Always stop at red lights! 🔴 Safe following distance should be at least 2 seconds in urban areas and 4 seconds on highways. Double this in rainy conditions.',
-      'Seat belts are mandatory for both front and rear passengers. Not wearing one risks your safety and results in fines! 🚗',
-      'Yellow light means "stop", not "speed up"! 🟡 If you\'ve already entered the intersection, you can pass. Otherwise, you must stop.'
+      'Always stop at red lights! 🔴 Safe following distance should be at least 2 seconds in urban areas.'
     ],
     app_features: [
-      'Sinyalizasyon has 3 amazing features: 🎮 Mini Games (memory, reflex, word puzzle), 💡 Info Cards (fun facts), and 📞 Quick Call (emergency numbers). Discover them all from the menu!',
-      'Our app automatically detects when you stop using GPS and finds the nearest traffic light, showing countdown to green. During this time, you can play games or read info cards! 🚦'
+      'Sinyalizasyon has 3 features: 🎮 Mini Games, 💡 Info Cards, and 📞 Quick Call.'
     ],
     games: [
-      '3 games await you! 🎮\n\n🧠 Memory Match: Flip cards and find pairs\n⚡ Reflex Test: How fast can you react to green?\n📝 Word Puzzle: Guess traffic terms\n\nAll have leaderboards - try to get the best score!'
+      '3 games await you! 🎮 Memory Match, Reflex Test, and Word Puzzle.'
     ],
     emergency: [
-      'Emergency numbers:\n🚑 112 - Emergency\n🚔 155 - Police\n🚒 110 - Fire Department\n📞 182 - Traffic Hotline\n\nUse our Quick Call feature for one-tap dialing!'
+      'Emergency numbers: 🚑 112 - Emergency, 🚔 155 - Police, 🚒 110 - Fire Dept.'
     ],
     default: [
-      'Interesting question! 🤔 I can help with traffic safety, app features, and emergencies. Want to ask something else?',
-      'I don\'t have detailed info on that, but I can answer questions about traffic rules, games, or emergency numbers! 🚦'
+      'Interesting question! 🤔 I can help with traffic safety, app features, and emergencies.',
+      'I don\'t have detailed info on that, but I can answer questions about traffic rules or games! 🚦'
     ]
   }
 };
 
-// Anahtar kelime eşleştirme ile kategori belirleme
 const KEYWORD_MAP = {
   greetings: ['merhaba', 'selam', 'hello', 'hi', 'hey', 'naber', 'nasılsın', 'meraba'],
-  traffic_rules: ['kural', 'trafik', 'hız', 'kırmızı', 'yeşil', 'sarı', 'ışık', 'kemer', 'ceza', 'rule', 'speed', 'light', 'belt', 'takip', 'mesafe', 'distance'],
-  app_features: ['uygulama', 'özellik', 'ne yapabilir', 'nasıl', 'feature', 'app', 'what can', 'how'],
-  games: ['oyun', 'game', 'hafıza', 'refleks', 'kelime', 'memory', 'reflex', 'word', 'oyna', 'play', 'skor', 'score'],
-  emergency: ['acil', 'emergency', '112', '155', '110', 'polis', 'ambulans', 'itfaiye', 'kaza', 'accident', 'yardım', 'help', 'ara', 'call']
+  traffic_rules: ['kural', 'trafik', 'hız', 'kırmızı', 'yeşil', 'sarı', 'ışık', 'kemer', 'ceza', 'rule', 'speed', 'light'],
+  app_features: ['uygulama', 'özellik', 'nasıl', 'feature', 'app', 'how'],
+  games: ['oyun', 'game', 'hafıza', 'refleks', 'kelime', 'memory', 'reflex', 'word', 'oyna', 'play'],
+  emergency: ['acil', 'emergency', '112', '155', '110', 'polis', 'ambulans', 'kaza', 'yardım', 'ara', 'call']
 };
 
 function getOfflineCategory(message) {
@@ -116,16 +105,53 @@ function getOfflineResponse(message, language) {
 }
 
 /**
- * Kullanıcı sorusuna yanıt üret (RAG + Grok)
+ * ── YENİ RAG MİMARİSİ ──
+ * RAG işlemi (Veritabanından bağlam çekme) tamamen izole edilmiştir.
+ * Eğer veritabanı çökerse veya tablo yoksa, chatbot bunu yoksayar ve sadece system prompt ile Grok'a gider.
+ */
+async function retrieveContext(query, language) {
+  if (!pool) return null; // DB bağlantısı yoksa RAG'ı atla
+
+  try {
+    const words = query.toLowerCase().split(/\s+/).filter(w => w.length > 2);
+    if (words.length === 0) return null;
+
+    // Timeout eklendi: RAG sorgusu 2 saniyeyi geçerse iptal et (Grok API'yi yavaşlatmasın)
+    const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('RAG Timeout')), 2000));
+    
+    // Her kelime için OR sorgusu oluştur
+    const conditions = words.map((_, i) => `content ILIKE $${i + 2}`).join(' OR ');
+    const values = [language, ...words.map(w => `%${w}%`)];
+    
+    const dbQueryPromise = pool.query(
+      `SELECT content FROM chatbot_knowledge WHERE language = $1 AND (${conditions}) LIMIT 3`,
+      values
+    );
+
+    const result = await Promise.race([dbQueryPromise, timeoutPromise]);
+    
+    if (result.rows && result.rows.length > 0) {
+      return result.rows.map(r => r.content).join('\n');
+    }
+    return null;
+  } catch (err) {
+    console.error('[RAG] Bağlam arama başarısız (Yok sayılıyor):', err.message);
+    return null; // RAG hatası chatbotu durdurmasın!
+  }
+}
+
+/**
+ * ── GROK API İLETİŞİMİ ──
+ * Kullanıcı sorusuna yanıt üretir.
  */
 async function generateResponse(userMessage, language = 'tr', conversationHistory = []) {
-  // 1. RAG: İlgili bilgileri veritabanından çek
+  // 1. RAG ile bağlamı güvenli bir şekilde çek (Hata verirse null döner)
   const context = await retrieveContext(userMessage, language);
 
-  // 2. Mesaj geçmişini hazırla (son 10 mesaj)
+  // 2. Mesaj geçmişini hazırla
   const recentHistory = conversationHistory.slice(-10);
 
-  // 3. Context varsa system mesajına ekle
+  // 3. System prompt'u bağlam (context) ile birleştir
   const systemContent = context
     ? `${SYSTEM_PROMPT}\n\n--- İlgili Bilgiler ---\n${context}\n----------------------`
     : SYSTEM_PROMPT;
@@ -136,12 +162,14 @@ async function generateResponse(userMessage, language = 'tr', conversationHistor
     { role: 'user', content: userMessage },
   ];
 
-  // Grok API key kontrolü
-  if (!process.env.GROK_API_KEY) {
-    console.warn('[Grok] API key tanımlı değil, offline mod kullanılıyor.');
+  // 4. API Key kontrolü
+  const apiKey = process.env.GROK_API_KEY;
+  if (!apiKey) {
+    console.warn('[Grok] GROK_API_KEY .env dosyasında bulunamadı. Offline mod devrede.');
     return { reply: getOfflineResponse(userMessage, language), model: 'offline' };
   }
 
+  // 5. Grok API'ye istek at
   try {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 12000); // 12 saniye timeout
@@ -150,7 +178,7 @@ async function generateResponse(userMessage, language = 'tr', conversationHistor
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${process.env.GROK_API_KEY}`,
+        'Authorization': `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
         model: GROK_MODEL,
@@ -165,54 +193,19 @@ async function generateResponse(userMessage, language = 'tr', conversationHistor
 
     if (!response.ok) {
       const err = await response.text();
-      console.error(`[Grok] API ${response.status}: ${err}`);
-      // 403/401 = kredi/yetki sorunu, 429 = rate limit, 5xx = sunucu hatası
-      // Hepsinde offline fallback kullan
-      return { reply: getOfflineResponse(userMessage, language), model: 'offline' };
+      console.error(`[Grok] API Hatası (${response.status}): ${err}`);
+      // 403 (Kredi bitti) veya 429 (Rate limit) durumunda kullanıcıya hatayı yansıtma, offline fallback kullan
+      return { reply: getOfflineResponse(userMessage, language), model: 'offline-fallback' };
     }
 
     const data = await response.json();
     const reply = data.choices?.[0]?.message?.content || getOfflineResponse(userMessage, language);
     return { reply, model: GROK_MODEL };
+    
   } catch (err) {
-    console.error('[Grok] API hatası:', err.message);
-    // Timeout, network hatası vs. — offline fallback
-    return { reply: getOfflineResponse(userMessage, language), model: 'offline' };
-  }
-}
-
-/**
- * RAG: Keyword eşleştirme ile chatbot_knowledge tablosundan ilgili içerik çek
- */
-async function retrieveContext(query, language) {
-  try {
-    const words = query.toLowerCase().split(/\s+/).filter(w => w.length > 2);
-    if (words.length === 0) return null;
-
-    // Her kelime için arama yap
-    const result = await pool.query(
-      `SELECT content FROM chatbot_knowledge
-       WHERE language = $1
-         AND (${words.map((_, i) => `content ILIKE $${i + 2}`).join(' OR ')})
-       LIMIT 3`,
-      [language, ...words.map(w => `%${w}%`)]
-    );
-
-    if (result.rows.length === 0) {
-      // Dil farketmeksizin ara
-      const fallback = await pool.query(
-        `SELECT content FROM chatbot_knowledge
-         WHERE (${words.map((_, i) => `content ILIKE $${i + 1}`).join(' OR ')})
-         LIMIT 2`,
-        words.map(w => `%${w}%`)
-      );
-      return fallback.rows.map(r => r.content).join('\n');
-    }
-
-    return result.rows.map(r => r.content).join('\n');
-  } catch (err) {
-    console.error('[RAG] Context retrieval hatası:', err.message);
-    return null;
+    console.error('[Grok] Bağlantı Hatası:', err.message);
+    // Timeout veya network kopması durumunda
+    return { reply: getOfflineResponse(userMessage, language), model: 'offline-timeout' };
   }
 }
 
