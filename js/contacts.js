@@ -21,15 +21,15 @@
       const contacts = await res.json();
 
       list.innerHTML = contacts.map(c => `
-        <a href="tel:${c.phone_number.replace(/\s+/g, '')}" class="contact-item" data-category="${c.category}">
-          <div class="contact-icon">${ICON_MAP[c.category] || '📞'}</div>
-          <div class="contact-info">
-            <h4 class="contact-name">${c.name}</h4>
-            <span class="contact-phone">${c.phone_number}</span>
-          </div>
-          <div class="contact-call-icon">📞</div>
-        </a>
-      `).join('');
+         <a href="tel:${c.phone.replace(/\s+/g, '')}" class="contact-item" data-category="${c.category}">
+           <div class="contact-icon">${ICON_MAP[c.category] || '📞'}</div>
+           <div class="contact-info">
+             <h4 class="contact-name">${c.category === 'emergency' || c.category === 'roadside' || c.category === 'government' ? c.name : c.name}</h4>
+             <span class="contact-phone">${c.phone}</span>
+           </div>
+           <div class="contact-call-icon">📞</div>
+         </a>
+       `).join('');
     } catch (_) {
       // Fallback
       list.innerHTML = `
@@ -62,7 +62,7 @@
       const templates = await res.json();
 
       list.innerHTML = templates.map(t => {
-        const textStr = window.i18n?.getLang() === 'en' ? t.text_content_en : t.text_content_tr;
+        const textStr = window.i18n?.getLang() === 'en' ? t.content_en : t.content_tr;
         return renderTemplateItem(t.emoji, textStr);
       }).join('');
     } catch (_) {

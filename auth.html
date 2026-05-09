@@ -1,132 +1,140 @@
 <!DOCTYPE html>
 <html lang="tr" data-theme="light">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Sinyalizasyon — Giriş Yap veya Kayıt Ol">
   <title>Sinyalizasyon | Giriş</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231a1a1a'/><circle cx='50' cy='28' r='14' fill='%23FF3B30'/><circle cx='50' cy='52' r='14' fill='%23FFD60A' opacity='.3'/><circle cx='50' cy='76' r='14' fill='%2334C759' opacity='.3'/></svg>">
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231a1a1a'/><circle cx='50' cy='28' r='14' fill='%23FF3B30'/><circle cx='50' cy='52' r='14' fill='%23FFD60A' opacity='.3'/><circle cx='50' cy='76' r='14' fill='%2334C759' opacity='.3'/></svg>">
   <link rel="stylesheet" href="css/design-system.css">
   <link rel="stylesheet" href="css/auth.css">
 </head>
+
 <body class="auth-body" id="pageBody">
 
-<div class="auth-bg" aria-hidden="true">
-  <div class="auth-bg-orb auth-bg-orb-1"></div>
-  <div class="auth-bg-orb auth-bg-orb-2"></div>
-</div>
-
-<div class="auth-container">
-
-  <!-- Logo -->
-  <div class="auth-logo-wrap">
-    <a href="index.html" class="auth-logo" aria-label="Ana sayfaya git">
-      <div class="auth-logo-icon">
-        <div class="auth-logo-lamp r"></div>
-        <div class="auth-logo-lamp y"></div>
-        <div class="auth-logo-lamp g"></div>
-      </div>
-      <span class="auth-logo-name" data-i18n="brand">Sinyalizasyon</span>
-    </a>
+  <div class="auth-bg" aria-hidden="true">
+    <div class="auth-bg-orb auth-bg-orb-1"></div>
+    <div class="auth-bg-orb auth-bg-orb-2"></div>
   </div>
 
-  <!-- Main Card -->
-  <div class="auth-card" id="authCard">
+  <div class="auth-container">
 
-    <!-- Step 1: Login / Register -->
-    <div id="authStep" class="anim-fade-in">
-      <!-- Tabs -->
-      <div class="auth-tabs" role="tablist" aria-label="Giriş veya Kayıt">
-        <button class="auth-tab active" id="tabLogin" role="tab" aria-selected="true" aria-controls="panelLogin" data-i18n="auth.tab.login">Giriş Yap</button>
-        <button class="auth-tab" id="tabRegister" role="tab" aria-selected="false" aria-controls="panelRegister" data-i18n="auth.tab.register">Kayıt Ol</button>
-      </div>
-
-      <!-- Error -->
-      <div class="auth-error" id="authError" role="alert"></div>
-
-      <!-- Login Panel -->
-      <div class="auth-panel active" id="panelLogin" role="tabpanel" aria-labelledby="tabLogin">
-        <div>
-          <h1 class="auth-heading" data-i18n="login.title">Tekrar Hoş Geldin 👋</h1>
-          <p class="auth-subheading" data-i18n="login.sub">Hesabınla giriş yap, kaldığın yerden devam et.</p>
+    <!-- Logo -->
+    <div class="auth-logo-wrap">
+      <a href="index.html" class="auth-logo" aria-label="Ana sayfaya git">
+        <div class="auth-logo-icon">
+          <div class="auth-logo-lamp r"></div>
+          <div class="auth-logo-lamp y"></div>
+          <div class="auth-logo-lamp g"></div>
         </div>
-        <form id="loginForm" novalidate>
-          <div class="form-group">
-            <label for="loginEmail" class="form-label" data-i18n="label.email">E-posta</label>
-            <input type="email" id="loginEmail" class="form-input" autocomplete="email" required
-              placeholder="ornek@email.com" data-i18n-placeholder="placeholder.email">
-          </div>
-          <div class="form-group">
-            <label for="loginPassword" class="form-label" data-i18n="label.password">Şifre</label>
-            <input type="password" id="loginPassword" class="form-input" autocomplete="current-password" required
-              placeholder="••••••" data-i18n-placeholder="placeholder.password">
-          </div>
-          <button type="submit" class="btn btn-primary auth-submit" id="loginBtn">
-            <span id="loginBtnText" data-i18n="btn.login">Giriş Yap</span>
-          </button>
-        </form>
-      </div>
+        <span class="auth-logo-name" data-i18n="brand">Sinyalizasyon</span>
+      </a>
+    </div>
 
-      <!-- Register Panel -->
-      <div class="auth-panel" id="panelRegister" role="tabpanel" aria-labelledby="tabRegister">
-        <div>
-          <h1 class="auth-heading" data-i18n="register.title">Hesap Oluştur 🚦</h1>
-          <p class="auth-subheading" data-i18n="register.sub">Ücretsiz, iki dakikada tamamlanır.</p>
+    <!-- Main Card -->
+    <div class="auth-card" id="authCard">
+
+      <!-- Step 1: Login / Register -->
+      <div id="authStep" class="anim-fade-in">
+        <!-- Tabs -->
+        <div class="auth-tabs" role="tablist" aria-label="Giriş veya Kayıt">
+          <button class="auth-tab active" id="tabLogin" role="tab" aria-selected="true" aria-controls="panelLogin"
+            data-i18n="auth.tab.login">Giriş Yap</button>
+          <button class="auth-tab" id="tabRegister" role="tab" aria-selected="false" aria-controls="panelRegister"
+            data-i18n="auth.tab.register">Kayıt Ol</button>
         </div>
-        <form id="registerForm" novalidate>
-          <div class="form-group">
-            <label for="regUsername" class="form-label" data-i18n="label.username">Kullanıcı Adı</label>
-            <input type="text" id="regUsername" class="form-input" autocomplete="username" required
-              placeholder="sinyal_user" data-i18n-placeholder="placeholder.username">
+
+        <!-- Error -->
+        <div class="auth-error" id="authError" role="alert"></div>
+
+        <!-- Login Panel -->
+        <div class="auth-panel active" id="panelLogin" role="tabpanel" aria-labelledby="tabLogin">
+          <div>
+            <h1 class="auth-heading" data-i18n="login.title">Tekrar Hoş Geldin 👋</h1>
+            <p class="auth-subheading" data-i18n="login.sub">Hesabınla giriş yap, kaldığın yerden devam et.</p>
           </div>
-          <div class="form-group">
-            <label for="regEmail" class="form-label" data-i18n="label.email">E-posta</label>
-            <input type="email" id="regEmail" class="form-input" autocomplete="email" required
-              placeholder="ornek@email.com" data-i18n-placeholder="placeholder.email">
-          </div>
-          <div class="form-group">
-            <label for="regPassword" class="form-label" data-i18n="label.password">Şifre</label>
-            <input type="password" id="regPassword" class="form-input" autocomplete="new-password" required
-              placeholder="En az 6 karakter" data-i18n-placeholder="placeholder.newpassword">
-            <div class="pw-strength" id="pwStrength" aria-hidden="true">
-              <div class="pw-bar" id="pwBar1"></div>
-              <div class="pw-bar" id="pwBar2"></div>
-              <div class="pw-bar" id="pwBar3"></div>
+          <form id="loginForm" novalidate>
+            <div class="form-group">
+              <label for="loginEmail" class="form-label" data-i18n="label.email">E-posta</label>
+              <input type="email" id="loginEmail" class="form-input" autocomplete="email" required
+                placeholder="ornek@email.com" data-i18n-placeholder="placeholder.email">
             </div>
+            <div class="form-group">
+              <label for="loginPassword" class="form-label" data-i18n="label.password">Şifre</label>
+              <input type="password" id="loginPassword" class="form-input" autocomplete="current-password" required
+                placeholder="••••••" data-i18n-placeholder="placeholder.password">
+            </div>
+            <button type="submit" class="btn btn-primary auth-submit" id="loginBtn">
+              <span id="loginBtnText" data-i18n="btn.login">Giriş Yap</span>
+            </button>
+          </form>
+        </div>
+
+        <!-- Register Panel -->
+        <div class="auth-panel" id="panelRegister" role="tabpanel" aria-labelledby="tabRegister">
+          <div>
+            <h1 class="auth-heading" data-i18n="register.title">Hesap Oluştur 🚦</h1>
+            <p class="auth-subheading" data-i18n="register.sub">Ücretsiz, iki dakikada tamamlanır.</p>
           </div>
-          <button type="submit" class="btn btn-primary auth-submit" id="registerBtn">
-            <span id="registerBtnText" data-i18n="btn.register">Kayıt Ol</span>
+          <form id="registerForm" novalidate>
+            <div class="form-group">
+              <label for="regUsername" class="form-label" data-i18n="label.username">Kullanıcı Adı</label>
+              <input type="text" id="regUsername" class="form-input" autocomplete="username" required
+                placeholder="sinyal_user" data-i18n-placeholder="placeholder.username">
+            </div>
+            <div class="form-group">
+              <label for="regEmail" class="form-label" data-i18n="label.email">E-posta</label>
+              <input type="email" id="regEmail" class="form-input" autocomplete="email" required
+                placeholder="ornek@email.com" data-i18n-placeholder="placeholder.email">
+            </div>
+            <div class="form-group">
+              <label for="regPassword" class="form-label" data-i18n="label.password">Şifre</label>
+              <input type="password" id="regPassword" class="form-input" autocomplete="new-password" required
+                placeholder="En az 6 karakter" data-i18n-placeholder="placeholder.newpassword">
+              <div class="pw-strength" id="pwStrength" aria-hidden="true">
+                <div class="pw-bar" id="pwBar1"></div>
+                <div class="pw-bar" id="pwBar2"></div>
+                <div class="pw-bar" id="pwBar3"></div>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary auth-submit" id="registerBtn">
+              <span id="registerBtnText" data-i18n="btn.register">Kayıt Ol</span>
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Step 2: GPS Permission -->
+      <div id="gpsStep" class="gps-step" role="dialog" aria-labelledby="gpsTitle" aria-modal="true">
+        <div class="gps-icon-wrap" aria-hidden="true">📍</div>
+        <h2 class="gps-title" id="gpsTitle" data-i18n="gps.title">Konum İzni Gerekli</h2>
+        <p class="gps-desc" data-i18n="gps.desc">
+          Trafik ışığında durduğunu anlayabilmek ve en yakın ışığı bulabilmek için konumuna ihtiyacımız var. Veriler
+          hiçbir zaman paylaşılmaz.
+        </p>
+        <div class="gps-actions">
+          <button class="btn btn-primary gps-allow-btn" id="gpsAllowBtn">
+            <span>📍</span>
+            <span data-i18n="gps.allow">Konuma İzin Ver</span>
           </button>
-        </form>
+          <button class="gps-skip-btn btn btn-ghost" id="gpsSkipBtn" data-i18n="gps.skip">
+            Şimdi değil, sonra ayarla
+          </button>
+        </div>
       </div>
-    </div>
 
-    <!-- Step 2: GPS Permission -->
-    <div id="gpsStep" class="gps-step" role="dialog" aria-labelledby="gpsTitle" aria-modal="true">
-      <div class="gps-icon-wrap" aria-hidden="true">📍</div>
-      <h2 class="gps-title" id="gpsTitle" data-i18n="gps.title">Konum İzni Gerekli</h2>
-      <p class="gps-desc" data-i18n="gps.desc">
-        Trafik ışığında durduğunu anlayabilmek ve en yakın ışığı bulabilmek için konumuna ihtiyacımız var. Veriler hiçbir zaman paylaşılmaz.
-      </p>
-      <div class="gps-actions">
-        <button class="btn btn-primary gps-allow-btn" id="gpsAllowBtn">
-          <span>📍</span>
-          <span data-i18n="gps.allow">Konuma İzin Ver</span>
-        </button>
-        <button class="gps-skip-btn btn btn-ghost" id="gpsSkipBtn" data-i18n="gps.skip">
-          Şimdi değil, sonra ayarla
-        </button>
-      </div>
     </div>
-
   </div>
-</div>
 
-<!-- Toasts -->
-<div class="toast-container" id="toastContainer" aria-live="polite"></div>
+  <!-- Toasts -->
+  <div class="toast-container" id="toastContainer" aria-live="polite"></div>
 
-<script src="js/theme.js"></script>
-<script src="js/i18n.js"></script>
-<script src="js/auth.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/theme.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/auth.js"></script>
 </body>
+
 </html>

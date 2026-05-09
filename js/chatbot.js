@@ -1,6 +1,11 @@
 /* chatbot.js — Sinyal AI Asistanı (Grok RAG entegrasyonu) */
 (function () {
-  const API = window.SINYAL_API || 'https://sinyal-backend-new.vercel.app/api';
+  // Backend URL: production'da Vercel, development'ta localhost:3002
+  const API = window.SINYAL_API || (
+    window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+      ? 'http://localhost:3002/api'
+      : 'https://sinyal-backend-new.vercel.app/api'
+  );
 
   const trigger = document.getElementById('catTrigger');
   const windowEl = document.getElementById('chatWindow');
@@ -88,8 +93,8 @@
     const isUser = role === 'user';
     const msg = document.createElement('div');
     msg.className = `chat-msg ${role}`;
-    const avatarHTML = isUser 
-      ? '👤' 
+    const avatarHTML = isUser
+      ? '👤'
       : '<div class="ai-cat-avatar small"><div class="ai-cat-ear left"></div><div class="ai-cat-ear right"></div><div class="ai-cat-face"><div class="ai-cat-eye left"></div><div class="ai-cat-eye right"></div></div></div>';
 
     msg.innerHTML = `
@@ -211,17 +216,17 @@
       const rect = avatar.getBoundingClientRect();
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
-      
+
       const deltaX = e.clientX - centerX;
       const deltaY = e.clientY - centerY;
-      
+
       // Limit eye movement distance
       const distance = Math.min(Math.hypot(deltaX, deltaY), 10);
       const angle = Math.atan2(deltaY, deltaX);
-      
+
       const moveX = Math.cos(angle) * distance * 0.3;
       const moveY = Math.sin(angle) * distance * 0.3;
-      
+
       const eyes = avatar.querySelectorAll('.ai-cat-eye');
       eyes.forEach(eye => {
         // Keep the CSS animation by setting a custom property or direct transform

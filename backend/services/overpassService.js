@@ -19,14 +19,16 @@ async function getLightsNearby(lat, lng, radiusM = 100) {
   // 1. DB cache kontrolü
   const cached = await pool.query(
     `SELECT * FROM traffic_lights
-     WHERE last_synced > NOW() - INTERVAL '${CACHE_HOURS} hours'
-       AND (6371000 * acos(
-         COALESCE(
-           cos(radians($1)) * cos(radians(latitude)) * cos(radians(longitude) - radians($2))
-           + sin(radians($1)) * sin(radians(latitude)),
-           -1
-         )
-       )) < $3`,
+      WHERE last_synced > NOW() - INTERVAL '${CACHE_HOURS} hours'
+        AND (
+          6371000 * acos(
+            LEAST(GREATEST(
+              cos(radians($1)) * cos(radians(latitude)) * cos(radians(longitude) - radians($2))
+              + sin(radians($1)) * sin(radians(latitude)),
+              -1
+            ), 1)
+          )
+        ) < $3`,
     [lat, lng, radiusM * 2] // 2x yarıçap ile cache'i geniş tut
   );
 
@@ -97,13 +99,15 @@ async function getLightsNearby(lat, lng, radiusM = 100) {
     // Overpass başarısız olursa cache'i dene (süresi dolmuş olsa bile)
     const fallback = await pool.query(
       `SELECT * FROM traffic_lights
-       WHERE (6371000 * acos(
-         COALESCE(
-           cos(radians($1)) * cos(radians(latitude)) * cos(radians(longitude) - radians($2))
-           + sin(radians($1)) * sin(radians(latitude)),
-           -1
+       WHERE (
+         6371000 * acos(
+           LEAST(GREATEST(
+             cos(radians($1)) * cos(radians(latitude)) * cos(radians(longitude) - radians($2))
+             + sin(radians($1)) * sin(radians(latitude)),
+             -1
+           ), 1)
          )
-       )) < $3`,
+       ) < $3`,
       [lat, lng, radiusM]
     );
     return fallback.rows;

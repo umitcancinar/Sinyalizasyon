@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="tr" data-theme="light">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Sinyalizasyon — Trafik ışığında beklemeyi fırsata dönüştür. Oyunlar, bilgi kartları ve daha fazlası.">
+  <meta name="description"
+    content="Sinyalizasyon — Trafik ışığında beklemeyi fırsata dönüştür. Oyunlar, bilgi kartları ve daha fazlası.">
   <meta name="theme-color" content="#0071E3">
   <title>Sinyalizasyon | Trafik Işığında Vakit Değerlendir</title>
 
@@ -13,271 +15,299 @@
   <meta property="og:type" content="website">
 
   <!-- Favicon: mini traffic light -->
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231a1a1a'/><circle cx='50' cy='28' r='14' fill='%23FF3B30'/><circle cx='50' cy='52' r='14' fill='%23FFD60A' opacity='.3'/><circle cx='50' cy='76' r='14' fill='%2334C759' opacity='.3'/></svg>">
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231a1a1a'/><circle cx='50' cy='28' r='14' fill='%23FF3B30'/><circle cx='50' cy='52' r='14' fill='%23FFD60A' opacity='.3'/><circle cx='50' cy='76' r='14' fill='%2334C759' opacity='.3'/></svg>">
 
   <link rel="stylesheet" href="css/design-system.css">
   <link rel="stylesheet" href="css/landing.css">
   <link rel="stylesheet" href="css/chatbot.css">
 </head>
+
 <body class="landing-body" id="pageBody">
 
-<!-- ── LOADING ─────────────────────────────────────────────── -->
-<div class="loading-screen" id="loadingScreen">
-  <div class="loading-tl">
-    <div class="ld ld-r"></div>
-    <div class="ld ld-y"></div>
-    <div class="ld ld-g"></div>
-  </div>
-  <p class="loading-text" data-i18n="loading">Yükleniyor...</p>
-</div>
-
-<!-- ── HEADER ──────────────────────────────────────────────── -->
-<header class="site-header" id="siteHeader">
-  <div class="container header-inner">
-    <a href="index.html" class="header-logo" aria-label="Ana sayfa">
-      <div class="tl-icon" aria-hidden="true">
-        <span class="tl-dot r"></span>
-        <span class="tl-dot y"></span>
-        <span class="tl-dot g active"></span>
-      </div>
-      <span data-i18n="brand">Sinyalizasyon</span>
-    </a>
-    <div class="header-actions">
-      <button class="lang-btn" id="langToggle" aria-label="Dil değiştir" title="Switch language">
-        <span class="lang-flag" id="langFlag">🇹🇷</span>
-        <span id="langLabel">TR</span>
-      </button>
-      <button class="theme-btn" id="themeToggle" aria-label="Temayı değiştir">☀️</button>
-      <a href="auth.html" class="btn btn-primary" style="padding:8px 18px;font-size:13px" data-i18n="nav.login">Giriş Yap</a>
+  <!-- ── LOADING ─────────────────────────────────────────────── -->
+  <div class="loading-screen" id="loadingScreen">
+    <div class="loading-tl">
+      <div class="ld ld-r"></div>
+      <div class="ld ld-y"></div>
+      <div class="ld ld-g"></div>
     </div>
+    <p class="loading-text" data-i18n="loading">Yükleniyor...</p>
   </div>
-</header>
 
-<main>
-
-  <!-- ── HERO ──────────────────────────────────────────────── -->
-  <section class="hero-section" id="hero" aria-label="Tanıtım">
-    <div class="hero-bg" aria-hidden="true">
-      <div class="hero-bg-orb hero-bg-orb-1"></div>
-      <div class="hero-bg-orb hero-bg-orb-2"></div>
-      <div class="hero-bg-orb hero-bg-orb-3"></div>
-    </div>
-    <div class="container hero-inner">
-
-      <!-- Left: Text -->
-      <div class="hero-content">
-        <div class="hero-eyebrow">
-          <span class="dot" aria-hidden="true"></span>
-          <span data-i18n="hero.eyebrow">Türkiye'nin İlk Akıllı Bekleme Uygulaması</span>
+  <!-- ── HEADER ──────────────────────────────────────────────── -->
+  <header class="site-header" id="siteHeader">
+    <div class="container header-inner">
+      <a href="index.html" class="header-logo" aria-label="Ana sayfa">
+        <div class="tl-icon" aria-hidden="true">
+          <span class="tl-dot r"></span>
+          <span class="tl-dot y"></span>
+          <span class="tl-dot g active"></span>
         </div>
-        <h1 class="hero-title">
-          <span data-i18n="hero.title.1">Trafik Işığında</span><br>
-          <span class="gradient-text" data-i18n="hero.title.2">Vakit Kaybetme</span>
-        </h1>
-        <p class="hero-desc" data-i18n="hero.desc">
-          GPS ile durduğunuzu algılıyoruz, yeşile dönme sayacını gösteriyoruz ve
-          bekleme sürenizi oyunlar, bilgi kartları ve daha fazlasıyla değerlendirmenize yardım ediyoruz.
-        </p>
-        <div class="hero-actions">
-          <a href="auth.html" class="btn btn-primary" id="heroCTA">
-            <span>🚀</span>
-            <span data-i18n="hero.cta.primary">Hemen Başla</span>
-          </a>
-          <a href="#how-it-works" class="btn btn-secondary" id="heroLearnMore">
-            <span data-i18n="hero.cta.secondary">Nasıl Çalışır?</span>
-          </a>
-        </div>
+        <span data-i18n="brand">Sinyalizasyon</span>
+      </a>
+      <div class="header-actions">
+        <button class="lang-btn" id="langToggle" aria-label="Dil değiştir" title="Switch language">
+          <span class="lang-flag" id="langFlag">🇹🇷</span>
+          <span id="langLabel">TR</span>
+        </button>
+        <button class="theme-btn" id="themeToggle" aria-label="Temayı değiştir">☀️</button>
+        <a href="auth.html" class="btn btn-primary" style="padding:8px 18px;font-size:13px" data-i18n="nav.login">Giriş
+          Yap</a>
       </div>
+    </div>
+  </header>
 
-      <!-- Right: Traffic Light Visual -->
-      <div class="hero-visual" aria-hidden="true">
-        <div class="hero-tl-container">
-          <div class="hero-tl">
-            <div class="tl-body" id="heroTlBody">
-              <div class="tl-lamp red" id="heroLampR">
-                <div class="tl-lamp-inner"></div>
+  <main>
+
+    <!-- ── HERO ──────────────────────────────────────────────── -->
+    <section class="hero-section" id="hero" aria-label="Tanıtım">
+      <div class="hero-bg" aria-hidden="true">
+        <div class="hero-bg-orb hero-bg-orb-1"></div>
+        <div class="hero-bg-orb hero-bg-orb-2"></div>
+        <div class="hero-bg-orb hero-bg-orb-3"></div>
+      </div>
+      <div class="container hero-inner">
+
+        <!-- Left: Text -->
+        <div class="hero-content">
+          <div class="hero-eyebrow">
+            <span class="dot" aria-hidden="true"></span>
+            <span data-i18n="hero.eyebrow">Türkiye'nin İlk Akıllı Bekleme Uygulaması</span>
+          </div>
+          <h1 class="hero-title">
+            <span data-i18n="hero.title.1">Trafik Işığında</span><br>
+            <span class="gradient-text" data-i18n="hero.title.2">Vakit Kaybetme</span>
+          </h1>
+          <p class="hero-desc" data-i18n="hero.desc">
+            GPS ile durduğunuzu algılıyoruz, yeşile dönme sayacını gösteriyoruz ve
+            bekleme sürenizi oyunlar, bilgi kartları ve daha fazlasıyla değerlendirmenize yardım ediyoruz.
+          </p>
+          <div class="hero-actions">
+            <a href="auth.html" class="btn btn-primary" id="heroCTA">
+              <span>🚀</span>
+              <span data-i18n="hero.cta.primary">Hemen Başla</span>
+            </a>
+            <a href="#how-it-works" class="btn btn-secondary" id="heroLearnMore">
+              <span data-i18n="hero.cta.secondary">Nasıl Çalışır?</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Right: Traffic Light Visual -->
+        <div class="hero-visual" aria-hidden="true">
+          <div class="hero-tl-container">
+            <div class="hero-tl">
+              <div class="tl-body" id="heroTlBody">
+                <div class="tl-lamp red" id="heroLampR">
+                  <div class="tl-lamp-inner"></div>
+                </div>
+                <div class="tl-lamp yellow" id="heroLampY">
+                  <div class="tl-lamp-inner"></div>
+                </div>
+                <div class="tl-lamp green" id="heroLampG">
+                  <div class="tl-lamp-inner"></div>
+                </div>
               </div>
-              <div class="tl-lamp yellow" id="heroLampY">
-                <div class="tl-lamp-inner"></div>
-              </div>
-              <div class="tl-lamp green" id="heroLampG">
-                <div class="tl-lamp-inner"></div>
-              </div>
+              <div class="tl-pole"></div>
             </div>
-            <div class="tl-pole"></div>
-          </div>
 
-          <!-- Floating cards around the traffic light -->
-          <div class="hero-float-cards">
-            <div class="hero-float-card">🎮 <span data-i18n="hero.float.games">Oyunlar</span></div>
-            <div class="hero-float-card">💡 <span data-i18n="hero.float.cards">Bilgi Kartları</span></div>
-            <div class="hero-float-card">⏱ 00:32</div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ── HOW IT WORKS ───────────────────────────────────────── -->
-  <section class="steps-section" id="how-it-works" aria-label="Nasıl çalışır">
-    <div class="container">
-      <div class="section-header fade-section">
-        <p class="section-tag" data-i18n="steps.tag">Nasıl Çalışır?</p>
-        <h2 class="section-title" data-i18n="steps.title">3 Adımda Başla</h2>
-        <p class="section-subtitle" data-i18n="steps.subtitle">Kurulum gerekmez. GPS izni ver, trafik ışığında dur, eğlen.</p>
-      </div>
-      <div class="steps-grid">
-        <div class="step-card fade-section delay-1">
-          <div class="step-num">01</div>
-          <div class="step-icon">📍</div>
-          <h3 class="step-title" data-i18n="step1.title">Konumunu Paylaş</h3>
-          <p class="step-desc" data-i18n="step1.desc">Uygulama açılışında tek seferlik GPS izni veriyorsun. Konumun güvende, yalnızca trafik ışığı eşleştirmesi için kullanılıyor.</p>
-        </div>
-        <div class="step-card fade-section delay-2">
-          <div class="step-num">02</div>
-          <div class="step-icon">🚦</div>
-          <h3 class="step-title" data-i18n="step2.title">Dur, Algılansın</h3>
-          <p class="step-desc" data-i18n="step2.desc">Hız sıfırlandığında akıllı algoritmamız durduğunu anlıyor, rotanı ve varsa dönüş sinyalini hesaba katarak doğru trafik ışığını buluyor.</p>
-        </div>
-        <div class="step-card fade-section delay-3">
-          <div class="step-num">03</div>
-          <div class="step-icon">🎮</div>
-          <h3 class="step-title" data-i18n="step3.title">Vakti Değerlendir</h3>
-          <p class="step-desc" data-i18n="step3.desc">Yeşile dönme sayacı sağ üstte beliriyor, menüden oyun oynayabilir, bilgi kartı okuyabilir veya hızlı arama yapabilirsin.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── FEATURES ───────────────────────────────────────────── -->
-  <section class="features-section" id="features" aria-label="Özellikler">
-    <div class="container">
-      <div class="section-header fade-section">
-        <p class="section-tag" data-i18n="features.tag">Özellikler</p>
-        <h2 class="section-title" data-i18n="features.title">Her Şey Burada</h2>
-      </div>
-      <div class="features-grid">
-        <div class="feature-card fade-section">
-          <div class="feature-icon-wrap">🎮</div>
-          <div class="feature-body">
-            <h3 class="feature-title" data-i18n="feat.games.title">Mini Oyunlar</h3>
-            <p class="feature-desc" data-i18n="feat.games.desc">Hafıza eşleştirme, refleks testi ve kelime bulmaca. Üç farklı oyun ile kırmızı ışık anın keyfe dönüşüyor.</p>
-          </div>
-        </div>
-        <div class="feature-card fade-section delay-1">
-          <div class="feature-icon-wrap">💡</div>
-          <div class="feature-body">
-            <h3 class="feature-title" data-i18n="feat.cards.title">Bilgi Kartları</h3>
-            <p class="feature-desc" data-i18n="feat.cards.desc">"Vay be!" dedirtecek az bilinen gerçekler. Bilim, uzay, doğa ve teknoloji kategorilerinde onlarca kart.</p>
-          </div>
-        </div>
-        <div class="feature-card fade-section delay-2">
-          <div class="feature-icon-wrap">📞</div>
-          <div class="feature-body">
-            <h3 class="feature-title" data-i18n="feat.contacts.title">Hızlı Arama</h3>
-            <p class="feature-desc" data-i18n="feat.contacts.desc">112, 155, 110 ve daha fazlası. Acil numaralara tek dokunuşla ulaş.</p>
-          </div>
-        </div>
-        <div class="feature-card fade-section delay-3">
-          <div class="feature-icon-wrap">💬</div>
-          <div class="feature-body">
-            <h3 class="feature-title" data-i18n="feat.messages.title">Hazır Mesajlar</h3>
-            <p class="feature-desc" data-i18n="feat.messages.desc">Trafikte takıldığını tek tuşla SMS veya WhatsApp ile iletebilirsin.</p>
-          </div>
-        </div>
-        <div class="feature-card large fade-section">
-          <div class="feature-icon-wrap" style="width:80px;height:80px;">
-            <div class="ai-cat-avatar" style="width:60px;height:60px;">
-              <div class="ai-cat-ear left"></div><div class="ai-cat-ear right"></div>
-              <div class="ai-cat-face"><div class="ai-cat-eye left"></div><div class="ai-cat-eye right"></div></div>
-              <div class="ai-cat-hand">👋</div>
+            <!-- Floating cards around the traffic light -->
+            <div class="hero-float-cards">
+              <div class="hero-float-card">🎮 <span data-i18n="hero.float.games">Oyunlar</span></div>
+              <div class="hero-float-card">💡 <span data-i18n="hero.float.cards">Bilgi Kartları</span></div>
+              <div class="hero-float-card">⏱ 00:32</div>
             </div>
           </div>
-          <div class="feature-body">
-            <h3 class="feature-title" data-i18n="feat.cat.title">Sinyal — AI Asistanın</h3>
-            <p class="feature-desc" data-i18n="feat.cat.desc">Sağ alttaki sevimli kedi Sinyal, trafik kuralları ve uygulama hakkında sorularını yanıtlıyor. Grok AI ile güçlendirilmiş, trafik odaklı bir asistan.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── HOW IT WORKS ───────────────────────────────────────── -->
+    <section class="steps-section" id="how-it-works" aria-label="Nasıl çalışır">
+      <div class="container">
+        <div class="section-header fade-section">
+          <p class="section-tag" data-i18n="steps.tag">Nasıl Çalışır?</p>
+          <h2 class="section-title" data-i18n="steps.title">3 Adımda Başla</h2>
+          <p class="section-subtitle" data-i18n="steps.subtitle">Kurulum gerekmez. GPS izni ver, trafik ışığında dur,
+            eğlen.</p>
+        </div>
+        <div class="steps-grid">
+          <div class="step-card fade-section delay-1">
+            <div class="step-num">01</div>
+            <div class="step-icon">📍</div>
+            <h3 class="step-title" data-i18n="step1.title">Konumunu Paylaş</h3>
+            <p class="step-desc" data-i18n="step1.desc">Uygulama açılışında tek seferlik GPS izni veriyorsun. Konumun
+              güvende, yalnızca trafik ışığı eşleştirmesi için kullanılıyor.</p>
+          </div>
+          <div class="step-card fade-section delay-2">
+            <div class="step-num">02</div>
+            <div class="step-icon">🚦</div>
+            <h3 class="step-title" data-i18n="step2.title">Dur, Algılansın</h3>
+            <p class="step-desc" data-i18n="step2.desc">Hız sıfırlandığında akıllı algoritmamız durduğunu anlıyor,
+              rotanı ve varsa dönüş sinyalini hesaba katarak doğru trafik ışığını buluyor.</p>
+          </div>
+          <div class="step-card fade-section delay-3">
+            <div class="step-num">03</div>
+            <div class="step-icon">🎮</div>
+            <h3 class="step-title" data-i18n="step3.title">Vakti Değerlendir</h3>
+            <p class="step-desc" data-i18n="step3.desc">Yeşile dönme sayacı sağ üstte beliriyor, menüden oyun
+              oynayabilir, bilgi kartı okuyabilir veya hızlı arama yapabilirsin.</p>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ── CTA ────────────────────────────────────────────────── -->
-  <section class="cta-section" aria-label="Başla">
-    <div class="container">
-      <div class="cta-box fade-section">
-        <h2 class="cta-title" data-i18n="cta.title">Bir Sonraki Kırmızı Işıkta Hazır Ol</h2>
-        <p class="cta-desc" data-i18n="cta.desc">Ücretsiz. Uygulama indirmene gerek yok. Sadece aç, izin ver, dur.</p>
-        <a href="auth.html" class="cta-btn">
-          <span>🚦</span>
-          <span data-i18n="cta.btn">Hemen Başla</span>
-          <span>→</span>
-        </a>
+    <!-- ── FEATURES ───────────────────────────────────────────── -->
+    <section class="features-section" id="features" aria-label="Özellikler">
+      <div class="container">
+        <div class="section-header fade-section">
+          <p class="section-tag" data-i18n="features.tag">Özellikler</p>
+          <h2 class="section-title" data-i18n="features.title">Her Şey Burada</h2>
+        </div>
+        <div class="features-grid">
+          <div class="feature-card fade-section">
+            <div class="feature-icon-wrap">🎮</div>
+            <div class="feature-body">
+              <h3 class="feature-title" data-i18n="feat.games.title">Mini Oyunlar</h3>
+              <p class="feature-desc" data-i18n="feat.games.desc">Hafıza eşleştirme, refleks testi ve kelime bulmaca. Üç
+                farklı oyun ile kırmızı ışık anın keyfe dönüşüyor.</p>
+            </div>
+          </div>
+          <div class="feature-card fade-section delay-1">
+            <div class="feature-icon-wrap">💡</div>
+            <div class="feature-body">
+              <h3 class="feature-title" data-i18n="feat.cards.title">Bilgi Kartları</h3>
+              <p class="feature-desc" data-i18n="feat.cards.desc">"Vay be!" dedirtecek az bilinen gerçekler. Bilim,
+                uzay, doğa ve teknoloji kategorilerinde onlarca kart.</p>
+            </div>
+          </div>
+          <div class="feature-card fade-section delay-2">
+            <div class="feature-icon-wrap">📞</div>
+            <div class="feature-body">
+              <h3 class="feature-title" data-i18n="feat.contacts.title">Hızlı Arama</h3>
+              <p class="feature-desc" data-i18n="feat.contacts.desc">112, 155, 110 ve daha fazlası. Acil numaralara tek
+                dokunuşla ulaş.</p>
+            </div>
+          </div>
+          <div class="feature-card fade-section delay-3">
+            <div class="feature-icon-wrap">💬</div>
+            <div class="feature-body">
+              <h3 class="feature-title" data-i18n="feat.messages.title">Hazır Mesajlar</h3>
+              <p class="feature-desc" data-i18n="feat.messages.desc">Trafikte takıldığını tek tuşla SMS veya WhatsApp
+                ile iletebilirsin.</p>
+            </div>
+          </div>
+          <div class="feature-card large fade-section">
+            <div class="feature-icon-wrap" style="width:80px;height:80px;">
+              <div class="ai-cat-avatar" style="width:60px;height:60px;">
+                <div class="ai-cat-ear left"></div>
+                <div class="ai-cat-ear right"></div>
+                <div class="ai-cat-face">
+                  <div class="ai-cat-eye left"></div>
+                  <div class="ai-cat-eye right"></div>
+                </div>
+                <div class="ai-cat-hand">👋</div>
+              </div>
+            </div>
+            <div class="feature-body">
+              <h3 class="feature-title" data-i18n="feat.cat.title">Sinyal — AI Asistanın</h3>
+              <p class="feature-desc" data-i18n="feat.cat.desc">Sağ alttaki sevimli kedi Sinyal, trafik kuralları ve
+                uygulama hakkında sorularını yanıtlıyor. Grok AI ile güçlendirilmiş, trafik odaklı bir asistan.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── CTA ────────────────────────────────────────────────── -->
+    <section class="cta-section" aria-label="Başla">
+      <div class="container">
+        <div class="cta-box fade-section">
+          <h2 class="cta-title" data-i18n="cta.title">Bir Sonraki Kırmızı Işıkta Hazır Ol</h2>
+          <p class="cta-desc" data-i18n="cta.desc">Ücretsiz. Uygulama indirmene gerek yok. Sadece aç, izin ver, dur.</p>
+          <a href="auth.html" class="cta-btn">
+            <span>🚦</span>
+            <span data-i18n="cta.btn">Hemen Başla</span>
+            <span>→</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── FOOTER ─────────────────────────────────────────────── -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-text" data-i18n="footer.copy">© 2026 Sinyalizasyon. Tüm hakları saklıdır.</p>
+      <div class="footer-links">
+        <a href="auth.html" class="footer-link" data-i18n="footer.login">Giriş</a>
+        <a href="auth.html#register" class="footer-link" data-i18n="footer.register">Kayıt</a>
       </div>
     </div>
-  </section>
+  </footer>
 
-</main>
-
-<!-- ── FOOTER ─────────────────────────────────────────────── -->
-<footer class="site-footer">
-  <div class="container footer-inner">
-    <p class="footer-text" data-i18n="footer.copy">© 2026 Sinyalizasyon. Tüm hakları saklıdır.</p>
-    <div class="footer-links">
-      <a href="auth.html" class="footer-link" data-i18n="footer.login">Giriş</a>
-      <a href="auth.html#register" class="footer-link" data-i18n="footer.register">Kayıt</a>
+  <!-- ── CAT CHATBOT ────────────────────────────────────────── -->
+  <div class="cat-chatbot-wrap" id="catChatbotWrap">
+    <div class="chat-window" id="chatWindow" role="dialog" aria-label="Sinyal AI Asistan" aria-modal="true">
+      <div class="chat-header">
+        <div class="chat-header-avatar">
+          <div class="ai-cat-avatar">
+            <div class="ai-cat-ear left"></div>
+            <div class="ai-cat-ear right"></div>
+            <div class="ai-cat-face">
+              <div class="ai-cat-eye left"></div>
+              <div class="ai-cat-eye right"></div>
+            </div>
+            <div class="ai-cat-hand">👋</div>
+          </div>
+        </div>
+        <div class="chat-header-info">
+          <div class="chat-header-name" data-i18n="chat.name">Sinyal</div>
+          <div class="chat-header-status" data-i18n="chat.status">Çevrimiçi</div>
+        </div>
+        <button class="chat-header-close" id="chatClose" aria-label="Kapat">✕</button>
+      </div>
+      <div class="chat-messages" id="chatMessages" role="log" aria-live="polite"></div>
+      <div class="chat-suggestions" id="chatSuggestions"></div>
+      <div class="chat-input-bar">
+        <textarea class="chat-input" id="chatInput" placeholder="Bir şey sor..." rows="1" aria-label="Mesajınız"
+          data-i18n-placeholder="chat.placeholder"></textarea>
+        <button class="chat-send-btn" id="chatSend" aria-label="Gönder">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+          </svg>
+        </button>
+      </div>
     </div>
-  </div>
-</footer>
-
-<!-- ── CAT CHATBOT ────────────────────────────────────────── -->
-<div class="cat-chatbot-wrap" id="catChatbotWrap">
-  <div class="chat-window" id="chatWindow" role="dialog" aria-label="Sinyal AI Asistan" aria-modal="true">
-    <div class="chat-header">
-      <div class="chat-header-avatar">
-        <div class="ai-cat-avatar">
+    <div class="cat-bubble" id="catBubble">👋 <span data-i18n="cat.hello">Merhaba! Sana yardımcı olabilirim.</span>
+    </div>
+    <button class="cat-trigger" id="catTrigger" data-state="wave" aria-label="Sinyal AI asistanını aç">
+      <div class="cat-face" id="catFace">
+        <div class="ai-cat-avatar" id="triggerAvatar">
           <div class="ai-cat-ear left"></div>
           <div class="ai-cat-ear right"></div>
-          <div class="ai-cat-face"><div class="ai-cat-eye left"></div><div class="ai-cat-eye right"></div></div>
+          <div class="ai-cat-face">
+            <div class="ai-cat-eye left"></div>
+            <div class="ai-cat-eye right"></div>
+          </div>
           <div class="ai-cat-hand">👋</div>
         </div>
       </div>
-      <div class="chat-header-info">
-        <div class="chat-header-name" data-i18n="chat.name">Sinyal</div>
-        <div class="chat-header-status" data-i18n="chat.status">Çevrimiçi</div>
-      </div>
-      <button class="chat-header-close" id="chatClose" aria-label="Kapat">✕</button>
-    </div>
-    <div class="chat-messages" id="chatMessages" role="log" aria-live="polite"></div>
-    <div class="chat-suggestions" id="chatSuggestions"></div>
-    <div class="chat-input-bar">
-      <textarea class="chat-input" id="chatInput" placeholder="Bir şey sor..." rows="1" aria-label="Mesajınız" data-i18n-placeholder="chat.placeholder"></textarea>
-      <button class="chat-send-btn" id="chatSend" aria-label="Gönder">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
-      </button>
-    </div>
+
+    </button>
   </div>
-  <div class="cat-bubble" id="catBubble">👋 <span data-i18n="cat.hello">Merhaba! Sana yardımcı olabilirim.</span></div>
-  <button class="cat-trigger" id="catTrigger" data-state="wave" aria-label="Sinyal AI asistanını aç">
-    <div class="cat-face" id="catFace">
-      <div class="ai-cat-avatar" id="triggerAvatar">
-        <div class="ai-cat-ear left"></div>
-        <div class="ai-cat-ear right"></div>
-        <div class="ai-cat-face"><div class="ai-cat-eye left"></div><div class="ai-cat-eye right"></div></div>
-        <div class="ai-cat-hand">👋</div>
-      </div>
-    </div>
 
-  </button>
-</div>
+  <!-- ── TOAST CONTAINER ────────────────────────────────────── -->
+  <div class="toast-container" id="toastContainer" aria-live="polite"></div>
 
-<!-- ── TOAST CONTAINER ────────────────────────────────────── -->
-<div class="toast-container" id="toastContainer" aria-live="polite"></div>
-
-<script src="js/theme.js"></script>
-<script src="js/i18n.js"></script>
-<script src="js/chatbot.js"></script>
-<script src="js/landing.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/theme.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/chatbot.js"></script>
+  <script src="js/landing.js"></script>
 </body>
+
 </html>

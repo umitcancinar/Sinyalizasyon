@@ -28,8 +28,15 @@ async function register(req, res) {
     const token = jwt.sign({ id: user.id, username: user.username }, process.env.JWT_SECRET, { expiresIn: '30d' });
     res.status(201).json({ token, user });
   } catch (err) {
-    console.error('[Auth] Register hata:', err.message);
-    res.status(500).json({ error: 'Sunucu hatası.' });
+    console.error('[Auth] Register hatası:', err.message);
+    console.error('[Auth] Register detay:', err.stack?.substring(0, 300));
+    if (!process.env.DATABASE_URL) {
+      return res.status(500).json({ error: 'Sunucu yapılandırma hatası: DATABASE_URL eksik.' });
+    }
+    if (!process.env.JWT_SECRET) {
+      return res.status(500).json({ error: 'Sunucu yapılandırma hatası: JWT_SECRET eksik.' });
+    }
+    res.status(500).json({ error: 'Sunucu hatası: ' + err.message });
   }
 }
 
@@ -64,7 +71,13 @@ async function login(req, res) {
     });
   } catch (err) {
     console.error('[Auth] Login hata:', err.message);
-    res.status(500).json({ error: 'Sunucu hatası.' });
+    if (!process.env.DATABASE_URL) {
+      return res.status(500).json({ error: 'Sunucu yapılandırma hatası: DATABASE_URL eksik.' });
+    }
+    if (!process.env.JWT_SECRET) {
+      return res.status(500).json({ error: 'Sunucu yapılandırma hatası: JWT_SECRET eksik.' });
+    }
+    res.status(500).json({ error: 'Sunucu hatası: ' + err.message });
   }
 }
 

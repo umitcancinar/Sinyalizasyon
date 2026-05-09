@@ -6,8 +6,8 @@
  */
 (function () {
   let countdownInterval = null;
-  let currentLight      = null;
-  let countdownState    = null; // Backend'den gelen son veri
+  let currentLight = null;
+  let countdownState = null; // Backend'den gelen son veri
 
   // ── GPS EVENTS ───────────────────────────────────────────────
   window.addEventListener('gps:stopped', async (e) => {
@@ -50,8 +50,8 @@
         return;
       }
 
-      currentLight    = data.light;
-      countdownState  = data.countdown;
+      currentLight = data.light;
+      countdownState = data.countdown;
 
       showCountdownUI(data);
       startLocalCountdown(data.countdown);
@@ -71,7 +71,7 @@
             turn_signal: turnSignal,
             traffic_light_id: data.light.id,
           }),
-        }).catch(() => {}); // sessiz fail
+        }).catch(() => { }); // sessiz fail
       }
 
     } catch (err) {
@@ -101,16 +101,23 @@
         if (pos) {
           try {
             const API = window.SINYAL_API || 'http://localhost:3002/api';
+            const heading = window.GPS ? Math.round(window.GPS.getLastPosition()?.heading || 0) : 0;
+            const turnSignal = window.GPS ? window.GPS.turnSignal || 'straight' : 'straight';
+            // Direction offset
+            let hOffset = 0;
+            if (turnSignal === 'left') hOffset = -45;
+            else if (turnSignal === 'right') hOffset = 45;
+            const finalHeading = ((heading || 0) + hOffset + 360) % 360;
             const params = new URLSearchParams({
               lat: pos.lat.toFixed(7), lng: pos.lng.toFixed(7),
-              heading: 0, turnSignal: 'straight',
+              heading: Math.round(finalHeading), turnSignal: turnSignal,
             });
             const res = await fetch(`${API}/traffic/nearby?${params}`);
             if (res.ok) {
               const d = await res.json();
               if (d.found) { state = d.countdown; updateCountdownDOM(state); return; }
             }
-          } catch (_) {}
+          } catch (_) { }
         }
       }
 
@@ -146,13 +153,13 @@
 
   // ── DOM UPDATES ───────────────────────────────────────────────
   function showCountdownUI(data) {
-    const idleCard    = document.getElementById('idleCard');
-    const cdCard      = document.getElementById('countdownCard');
-    const menuGrid    = document.getElementById('menuGrid');
+    const idleCard = document.getElementById('idleCard');
+    const cdCard = document.getElementById('countdownCard');
+    const menuGrid = document.getElementById('menuGrid');
 
-    if (idleCard)  { idleCard.classList.remove('visible'); idleCard.style.display = 'none'; }
-    if (cdCard)    { cdCard.style.display = 'block'; }
-    if (menuGrid)  { menuGrid.style.display = 'grid'; }
+    if (idleCard) { idleCard.classList.remove('visible'); idleCard.style.display = 'none'; }
+    if (cdCard) { cdCard.style.display = 'block'; }
+    if (menuGrid) { menuGrid.style.display = 'grid'; }
 
     // Location info
     const nameEl = document.getElementById('lightName');
@@ -163,13 +170,13 @@
 
   function hideCountdownUI() {
     const idleCard = document.getElementById('idleCard');
-    const cdCard   = document.getElementById('countdownCard');
+    const cdCard = document.getElementById('countdownCard');
     const menuGrid = document.getElementById('menuGrid');
     // Close open panels too
     document.querySelectorAll('.content-panel.active').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.menu-card.active').forEach(c => c.classList.remove('active'));
 
-    if (cdCard)   cdCard.style.display = 'none';
+    if (cdCard) cdCard.style.display = 'none';
     if (menuGrid) menuGrid.style.display = 'none';
     if (idleCard) { idleCard.style.display = 'block'; idleCard.classList.add('visible'); }
   }
@@ -181,39 +188,39 @@
     // Phase labels
     const phaseLabels = {
       tr: { red: 'Kırmızı Işık', green: 'Yeşil Işık', yellow: 'Sarı Işık' },
-      en: { red: 'Red Light',    green: 'Green Light', yellow: 'Yellow Light' },
+      en: { red: 'Red Light', green: 'Green Light', yellow: 'Yellow Light' },
     };
     const subLabels = {
       tr: { red: 'yeşile kalan süre', green: 'yeşil — geçebilirsiniz', yellow: 'sarı — yavaşlayın' },
-      en: { red: 'until green',       green: 'green — you may go',      yellow: 'yellow — slow down' },
+      en: { red: 'until green', green: 'green — you may go', yellow: 'yellow — slow down' },
     };
 
     // Format time MM:SS
     const mins = Math.floor(secondsLeft / 60);
     const secs = secondsLeft % 60;
-    const timeStr = `${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+    const timeStr = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
 
     // Update card
     const card = document.getElementById('countdownCard');
     if (card) card.setAttribute('data-phase', phase);
 
-    const timeEl  = document.getElementById('countdownTime');
+    const timeEl = document.getElementById('countdownTime');
     const phaseEl = document.getElementById('phaseLabel');
-    const subEl   = document.getElementById('subLabel');
-    const fillEl  = document.getElementById('progressFill');
+    const subEl = document.getElementById('subLabel');
+    const fillEl = document.getElementById('progressFill');
     const progBar = document.getElementById('progressBar');
 
-    if (timeEl)  timeEl.textContent = timeStr;
+    if (timeEl) timeEl.textContent = timeStr;
     if (phaseEl) phaseEl.textContent = phaseLabels[lang]?.[phase] || phase;
-    if (subEl)   subEl.textContent   = subLabels[lang]?.[phase]   || '';
-    if (fillEl)  fillEl.style.width  = `${progressPercent}%`;
+    if (subEl) subEl.textContent = subLabels[lang]?.[phase] || '';
+    if (fillEl) fillEl.style.width = `${progressPercent}%`;
     if (progBar) progBar.setAttribute('aria-valuenow', progressPercent);
 
     // Header countdown widget
     const hWidget = document.getElementById('headerCountdown');
-    const hTime   = document.getElementById('headerCountdownTime');
+    const hTime = document.getElementById('headerCountdownTime');
     if (hWidget) { hWidget.style.display = 'flex'; hWidget.setAttribute('data-phase', phase); }
-    if (hTime)   hTime.textContent = timeStr;
+    if (hTime) hTime.textContent = timeStr;
   }
 
   window.Traffic = { findAndMatchLight, clearCountdown };
