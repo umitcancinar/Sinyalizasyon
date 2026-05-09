@@ -1,10 +1,12 @@
 /* auth.js — Frontend kimlik doğrulama */
 (function () {
   // ── CONFIG ──────────────────────────────────────────────────
-  // Backend URL: production'da gerçek URL'yi buraya yazın
-  const API = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-    ? 'http://localhost:3002/api'
-    : 'https://sinyal-backend-new.vercel.app/api';
+  // Backend URL: config.js'ten gelen SINYAL_API'yi kullan, yoksa fallback
+  const API = window.SINYAL_API || (
+    window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+      ? 'http://localhost:3002/api'
+      : 'https://sinyal-backend-new.vercel.app/api'
+  );
 
   window.SINYAL_API = API; // Diğer dosyalara aç
 
@@ -161,25 +163,43 @@
 
     document.getElementById('gpsAllowBtn').addEventListener('click', () => {
       if (!('geolocation' in navigator)) {
-        toast('Tarayıcınız GPS desteklemiyor.', 'error');
+        // GPS desteklenmiyor - bilgi mesajı göster, hata değil
+        toast('Tarayıcınız GPS desteklemiyor. Uygulamayı GPS olmadan kullanabilirsiniz.', 'info');
+        localStorage.setItem('sinyal_gps', 'unsupported');
         redirectToApp();
         return;
       }
+
+      // GPS izni iste
       navigator.geolocation.getCurrentPosition(
         (pos) => {
+          // ✅ İzin verildi
           localStorage.setItem('sinyal_gps', 'granted');
           toast('Konum izni verildi! 📍', 'success');
           redirectToApp();
         },
         (err) => {
-          toast('GPS izni reddedildi. Ayarlardan açabilirsiniz.', 'error');
+          // ⚠️ İzin reddedildi veya hata
+          // Kırmızı hata yerine sarı uyarı göster — uygulama GPS olmadan da çalışır
+          if (err.code === 1) {
+            // Kullanıcı izni reddetti
+            localStorage.setItem('sinyal_gps', 'denied');
+            toast('GPS izni reddedildi. Trafik ışığı özelliği devre dışı kalacak.', 'info');
+          } else {
+            // Timeout veya konum alınamadı
+            localStorage.setItem('sinyal_gps', 'error');
+            toast('Konum şu an alınamadı. Sonra ayarlardan açabilirsiniz.', 'info');
+          }
           redirectToApp();
         },
         { enableHighAccuracy: true, timeout: 10000 }
       );
     });
 
-    document.getElementById('gpsSkipBtn').addEventListener('click', redirectToApp);
+    document.getElementById('gpsSkipBtn').addEventListener('click', () => {
+      localStorage.setItem('sinyal_gps', 'skipped');
+      redirectToApp();
+    });
 
     function redirectToApp() {
       setTimeout(() => { window.location.href = 'app.html'; }, 500);
@@ -191,7 +211,7 @@
   if (logoutBtn) {
     logoutBtn.addEventListener('click', () => {
       clearAuth();
-      window.location.href = 'app.html';
+      window.location.href = 'auth.html';
     });
   }
 

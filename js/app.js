@@ -28,17 +28,19 @@
   });
 
   // When traffic matches, traffic.js will update UI. We just update the little dot
-  const origTrafficMatch = window.Traffic.findAndMatchLight;
-  window.Traffic.findAndMatchLight = async function(...args) {
-    statusDot.className = 'status-dot stopped';
-    statusLabel.textContent = window.i18n ? window.i18n.t('status.stopped') : 'Eşleştiriliyor...';
-    await origTrafficMatch.apply(this, args);
-    // if successful (countdown card is visible):
-    if (document.getElementById('countdownCard')?.style.display === 'block') {
-      statusDot.className = 'status-dot active';
-      statusLabel.textContent = window.i18n ? window.i18n.t('status.matched') : 'Trafik ışığı bulundu';
-    }
-  };
+  if (window.Traffic && window.Traffic.findAndMatchLight) {
+    const origTrafficMatch = window.Traffic.findAndMatchLight;
+    window.Traffic.findAndMatchLight = async function(...args) {
+      statusDot.className = 'status-dot stopped';
+      statusLabel.textContent = window.i18n ? window.i18n.t('status.stopped') : 'Eşleştiriliyor...';
+      await origTrafficMatch.apply(this, args);
+      // if successful (countdown card is visible):
+      if (document.getElementById('countdownCard')?.style.display === 'block') {
+        statusDot.className = 'status-dot active';
+        statusLabel.textContent = window.i18n ? window.i18n.t('status.matched') : 'Trafik ışığı bulundu';
+      }
+    };
+  }
 
   // ── TURN SIGNAL LOGIC ─────────────────────────────────────────
   document.querySelectorAll('.turn-btn').forEach(btn => {
@@ -87,14 +89,23 @@
   });
 
   // ── INITIALIZE ───────────────────────────────────────────────
-  // App yüklendiğinde GPS izni varsa direkt başlat
-  if (localStorage.getItem('sinyal_gps') === 'granted') {
+  // GPS izni varsa GPS'i başlat, yoksa uygulama GPS OLMADAN çalışmaya devam etsin
+  // ❌ ESKİ KOD: GPS izni yoksa auth.html'e yönlendiriyordu → SONSUZ DÖNGÜ!
+  // ✅ YENİ KOD: GPS izni yoksa sadece GPS başlatılmaz, uygulama normal çalışır
+  const gpsStatus = localStorage.getItem('sinyal_gps');
+
+  if (gpsStatus === 'granted') {
+    // GPS izni verilmiş, başlat
     if (window.GPS) window.GPS.start();
   } else {
-    // İzin yoksa auth/gps adımına at (guard)
-    if (window.location.pathname.endsWith('app.html')) {
-      window.location.href = 'auth.html#register';
+    // GPS izni yok — uygulama GPS olmadan çalışır
+    // Status bar'ı güncelle
+    if (statusDot) statusDot.style.background = 'var(--yellow)';
+    if (statusLabel) {
+      const noGpsMsg = window.i18n ? window.i18n.t('status.nogps') : 'GPS devre dışı — Ayarlardan açabilirsiniz';
+      statusLabel.textContent = noGpsMsg;
     }
+    console.info('[App] GPS izni yok, uygulama GPS olmadan çalışıyor. Durum:', gpsStatus);
   }
 
 })();

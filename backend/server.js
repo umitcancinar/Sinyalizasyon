@@ -19,7 +19,26 @@ app.use(cors({
 
 app.use(express.json({ limit: '1mb' }));
 
-// Routes
+// ── DB Initialization ──────────────────────────────────────────
+let dbReady = false;
+const dbInit = initDatabase().then(() => {
+  dbReady = true;
+  console.log('[Server] DB bağlantısı hazır.');
+}).catch((err) => {
+  console.error('[Server] DB bağlantı hatası:', err.message);
+});
+
+// DB durumunu kontrol eden middleware — ROUTE'LARDAN ÖNCE olmalı
+app.use(async (req, res, next) => {
+  if (!dbReady) {
+    try {
+      await dbInit;
+    } catch (_) { }
+  }
+  next();
+});
+
+// ── Routes — DB middleware'dan SONRA ─────────────────────────
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/traffic', require('./routes/traffic'));
 app.use('/api/chatbot', require('./routes/chatbot'));
@@ -30,28 +49,9 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', service: 'Trafik Sinyalizasyon API', environment: process.env.NODE_ENV || 'development' });
 });
 
+// 404 handler — en sonda olmalı
 app.use((req, res) => {
   res.status(404).json({ error: 'Endpoint bulunamadı.' });
-});
-
-// Vercel'de serverless ortamda da initDatabase yapılıp middleware ile
-// her istek öncesi DB bağlantısı kontrol edilir
-let dbReady = false;
-const dbInit = initDatabase().then(() => {
-  dbReady = true;
-  console.log('[Server] DB bağlantısı hazır.');
-}).catch((err) => {
-  console.error('[Server] DB bağlantı hatası:', err.message);
-});
-
-// DB durumunu kontrol eden middleware
-app.use(async (req, res, next) => {
-  if (!dbReady) {
-    try {
-      await dbInit;
-    } catch (_) { }
-  }
-  next();
 });
 
 // Development modunda doğrudan dinle
